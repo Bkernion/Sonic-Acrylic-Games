@@ -1,0 +1,13 @@
+{
+  "date": "2026-05-12",
+  "edition_no": 2,
+  "lineup_artists": ["Bon Iver", "Sufjan Stevens", "The National", "Fleet Foxes", "Iron & Wine"],
+  "theme_pull_quote": "Five voices, five winters. The kind of records you put on at dusk.",
+  "marginalia_quote": "Look for what the lineup keeps coming back to.",
+  "connections_categories": [
+    { "name": "States as song titles", "difficulty": 1, "members": ["Michigan", "Texas", "Indiana", "Oklahoma"] },
+    { "name": "One-word records", "difficulty": 2, "members": ["Casimir", "Naeem", "Bloodbuzz", "Mykonos"] },
+    { "name": "Released in 2007", "difficulty": 3, "members": ["Wolves", "Skinny Love", "Boxer", "He Lays in the Reins"] },
+    { "name": "Bonus track only", "difficulty": 4, "members": ["Heavenly Father", "Sea Lion", "Slow Show", "Naomi"] }
+  ]
+}

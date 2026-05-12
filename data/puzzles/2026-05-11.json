@@ -1,0 +1,13 @@
+{
+  "date": "2026-05-11",
+  "edition_no": 1,
+  "lineup_artists": ["Phoebe Bridgers", "Big Thief", "Andy Shauf", "Aldous Harding", "Cassandra Jenkins"],
+  "theme_pull_quote": "Five quiet voices on what it feels like to almost remember.",
+  "marginalia_quote": "Each group is a room — listen for the door creak.",
+  "connections_categories": [
+    { "name": "Songs about water", "difficulty": 1, "members": ["Funeral", "Moon Song", "Salt In The Wound", "Hard Drive"] },
+    { "name": "Two-word titles", "difficulty": 2, "members": ["The Magician", "Try Hard", "Garden Song", "Not Strong Enough"] },
+    { "name": "Track 1s on a debut LP", "difficulty": 3, "members": ["Smoke Signals", "Masterpiece", "Real Estate", "Hard Hill"] },
+    { "name": "Released in November", "difficulty": 4, "members": ["Punisher", "Cattails", "Cool Dry Place", "Two Reverse"] }
+  ]
+}
