@@ -70,13 +70,9 @@ html, body { background: #1A1A1A; }
 /* Hairlines */
 .hr { height: 1px; background: var(--hair); border: 0; }
 
-/* Equalizer — propagating wave: same duration, staggered animation-delay per bar */
-@keyframes eq-bar { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
-.eq-bar {
-  transform-origin: bottom;
-  animation: eq-bar var(--eq-duration, 1.1s) ease-in-out infinite;
-  animation-delay: var(--eq-delay, 0s);
-}
+/* Equalizer animation for NowPlaying */
+@keyframes eq-bar { 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
+.eq-bar { transform-origin: bottom; animation: eq-bar var(--eq-duration, 1.4s) ease-in-out infinite; }
 .eq-paused .eq-bar { animation-play-state: paused; transform: scaleY(0.5); }
 
 /* Paper-2 surface helper — apply this class to any element that should get the warm gradient */
