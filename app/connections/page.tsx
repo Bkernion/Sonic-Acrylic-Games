@@ -159,7 +159,7 @@ export default function ConnectionsPage() {
             Sixteen songs.<br />Four hidden categories.
           </p>
           <p className="mono" style={{ fontSize: 11, lineHeight: 1.4, color: "var(--rust)", marginTop: 4, textTransform: "uppercase", fontStyle: "normal", letterSpacing: "0.04em" }}>
-            TAP 4 TILES. SUBMIT TO CHECK. 4 WRONG ENDS THE GAME.
+            TAP 4 TILES. SUBMIT TO CHECK. 4 WRONG GUESSES ENDS THE GAME.
           </p>
         </div>
 
