@@ -75,10 +75,10 @@ export function WinModal({ stats, editionId, onClose }: { stats: Stats; editionI
         <div className="mono uppercase text-[10px] tracking-[0.22em]" style={{ color: "var(--rust)" }}>
           {stats.outcome === "won" ? "SOLVED" : "TOMORROW"} · {mm}:{ss}
         </div>
-        <h2 className="serif font-semibold text-[28px] leading-[1.1] mt-2">
+        <h2 className="serif font-semibold text-[32px] leading-[1.1] mt-2">
           {stats.outcome === "won" ? "Four groups solved." : "No groups, no sweat."}
         </h2>
-        <p className="serif italic text-[13px] mt-2" style={{ color: "var(--taupe)" }}>
+        <p className="serif italic text-[14px] mt-2" style={{ color: "var(--taupe)" }}>
           {stats.outcome === "won"
             ? "Stay for the music. We open the door again tomorrow at midnight ET."
             : "Listen on for a minute. Tomorrow's lineup is on its way."}
@@ -141,8 +141,8 @@ export function WinModal({ stats, editionId, onClose }: { stats: Stats; editionI
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="p-2 rounded-[6px] surface-warm">
-      <div className="mono uppercase text-[9px] tracking-[0.18em]" style={{ color: "var(--taupe)" }}>{label}</div>
-      <div className="serif text-[18px] mt-1">{value}</div>
+      <div className="mono uppercase text-[10px] tracking-[0.18em]" style={{ color: "var(--taupe)" }}>{label}</div>
+      <div className="serif text-[20px] mt-1">{value}</div>
     </div>
   );
 }

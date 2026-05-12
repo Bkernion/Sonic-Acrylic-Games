@@ -25,8 +25,8 @@ export function GameCard({ index, kicker, title, subtitle, href, comingSoon }: P
         <div className="mono uppercase text-[10px] tracking-[0.22em]" style={{ color: "var(--rust)" }}>
           {kicker}
         </div>
-        <div className="serif text-[17px] mt-[2px]" style={{ color: "var(--ink)" }}>{title}</div>
-        <div className="serif italic text-[12.5px] mt-[2px]" style={{ color: "var(--taupe)", fontWeight: 400 }}>{subtitle}</div>
+        <div className="serif text-[19px] mt-[2px]" style={{ color: "var(--ink)" }}>{title}</div>
+        <div className="serif italic text-[13.5px] mt-[2px]" style={{ color: "var(--taupe)", fontWeight: 400 }}>{subtitle}</div>
       </div>
       <div className="mono text-[10px]" style={{ color: comingSoon ? "var(--taupe)" : "var(--ink)" }}>
         {comingSoon ? comingSoon : "→"}

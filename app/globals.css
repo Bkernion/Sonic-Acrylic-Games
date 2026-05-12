@@ -43,24 +43,27 @@ html, body { background: #1A1A1A; }
   position: relative;
 }
 
-/* Faint swirl underlay — concentric "rings" with slow propagating drift */
+/* Faint swirl underlay — concentric "rings" with slow drift.
+   Extended past the stage edges (inset:-60px) + light blur so motion
+   never exposes underlay boundaries (no hard line). */
 .stage::before {
   content: '';
-  position: absolute; inset: 0;
+  position: absolute;
+  inset: -60px;
   background-image:
-    repeating-radial-gradient(circle at 30% 20%, transparent 0, rgba(230,58,189,0.06) 14px, transparent 28px),
-    repeating-radial-gradient(circle at 80% 80%, transparent 0, rgba(78,217,229,0.07) 18px, transparent 36px);
-  background-size: 240px 240px, 360px 360px;
+    repeating-radial-gradient(circle at 30% 20%, transparent 0, rgba(230,58,189,0.05) 14px, transparent 28px),
+    repeating-radial-gradient(circle at 80% 80%, transparent 0, rgba(78,217,229,0.06) 18px, transparent 36px);
   pointer-events: none;
   mix-blend-mode: multiply;
   z-index: 0;
-  animation: swirl-drift 36s ease-in-out infinite;
+  filter: blur(1.5px);
+  animation: swirl-drift 28s ease-in-out infinite;
 }
 .stage > * { position: relative; z-index: 1; }
 @keyframes swirl-drift {
-  0%   { background-position: 0px 0px, 0px 0px; }
-  50%  { background-position: 120px 60px, -180px -90px; }
-  100% { background-position: 0px 0px, 0px 0px; }
+  0%, 100% { transform: translate(0, 0); }
+  33%      { transform: translate(22px, 16px); }
+  66%      { transform: translate(-18px, 26px); }
 }
 
 /* Type defaults: EB Garamond is narrower than Newsreader — relax tracking a bit. */
@@ -75,9 +78,19 @@ html, body { background: #1A1A1A; }
 .eq-bar { transform-origin: bottom; animation: eq-bar var(--eq-duration, 1.4s) ease-in-out infinite; }
 .eq-paused .eq-bar { animation-play-state: paused; transform: scaleY(0.5); }
 
-/* Paper-2 surface helper — apply this class to any element that should get the warm gradient */
+/* Paper-2 surface helper — peach→pink with a slow plasma drift so badges feel alive */
 .surface-warm {
-  background: var(--paper-2-gradient);
+  background:
+    radial-gradient(ellipse 80% 70% at 25% 30%, rgba(255, 179, 217, 0.85) 0%, rgba(255, 179, 217, 0) 70%),
+    radial-gradient(ellipse 80% 70% at 75% 70%, rgba(255, 196, 156, 0.85) 0%, rgba(255, 196, 156, 0) 70%),
+    linear-gradient(135deg, #FCD8B5 0%, #FFB3D9 100%);
+  background-size: 220% 220%, 220% 220%, 100% 100%;
+  background-position: 0% 0%, 100% 100%, 0% 0%;
+  animation: warm-drift 14s ease-in-out infinite;
+}
+@keyframes warm-drift {
+  0%, 100% { background-position: 0% 0%,   100% 100%, 0% 0%; }
+  50%      { background-position: 100% 100%, 0% 0%,   0% 0%; }
 }
 
 /* Rust pill glow */
@@ -85,23 +98,23 @@ html, body { background: #1A1A1A; }
   box-shadow: var(--rust-glow);
 }
 
-/* Plasmatic moving gradient — magenta/peach/pink lava-lamp wash for rust CTAs */
+/* Plasmatic moving gradient — vivid magenta/peach blobs orbiting on the rust CTAs */
 .cta-plasma {
   background:
-    radial-gradient(ellipse 70% 60% at 25% 30%, rgba(255, 143, 224, 0.95) 0%, rgba(255, 143, 224, 0) 60%),
-    radial-gradient(ellipse 70% 60% at 75% 70%, rgba(255, 138, 31, 0.90) 0%, rgba(255, 138, 31, 0) 60%),
-    radial-gradient(ellipse 90% 70% at 50% 50%, rgba(230, 58, 189, 0.60) 0%, rgba(230, 58, 189, 0) 70%),
+    radial-gradient(circle 60px at 20% 50%, #FF8FE0 0%, rgba(255, 143, 224, 0) 65%),
+    radial-gradient(circle 60px at 80% 50%, #FF8A1F 0%, rgba(255, 138, 31, 0) 65%),
+    radial-gradient(circle 80px at 50% 50%, rgba(255, 100, 200, 0.7) 0%, rgba(255, 100, 200, 0) 70%),
     linear-gradient(95deg, #C8228F 0%, #E63ABD 100%);
-  background-size: 200% 200%, 200% 200%, 220% 220%, 100% 100%;
+  background-size: 250% 250%, 250% 250%, 250% 250%, 100% 100%;
   background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%;
-  animation: plasma-flow 8s ease-in-out infinite;
+  animation: plasma-flow 5s ease-in-out infinite;
   color: #FFF1DE;
 }
 @keyframes plasma-flow {
-  0%   { background-position: 0% 20%,   100% 100%, 30% 70%,  0% 0%; }
-  33%  { background-position: 60% 80%,  40% 30%,  80% 20%,  0% 0%; }
-  66%  { background-position: 30% 50%,  80% 70%,  20% 90%,  0% 0%; }
-  100% { background-position: 0% 20%,   100% 100%, 30% 70%,  0% 0%; }
+  0%, 100% { background-position: 0% 0%,    100% 100%, 50% 50%,  0% 0%; }
+  25%      { background-position: 100% 0%,  0% 100%,  20% 80%,  0% 0%; }
+  50%      { background-position: 100% 100%, 0% 0%,   80% 20%,  0% 0%; }
+  75%      { background-position: 0% 100%,  100% 0%,  20% 20%,  0% 0%; }
 }
 
 /* Grain noise overlay — apply via a wrapping div with class "grain" */

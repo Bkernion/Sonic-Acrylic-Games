@@ -51,7 +51,7 @@ export function FullRibbon() {
       <PlayPause />
       <Equalizer playing={np.isPlaying} />
       <div className="flex-1 min-w-0">
-        <div className="serif italic text-[13px] truncate" style={{ color: "var(--ink)" }}>
+        <div className="serif italic text-[14px] truncate" style={{ color: "var(--ink)" }}>
           {np.current.title}
         </div>
         <div className="mono uppercase text-[9px] tracking-[0.18em] truncate" style={{ color: "var(--taupe)" }}>

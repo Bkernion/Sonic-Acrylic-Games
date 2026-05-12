@@ -138,11 +138,11 @@ export default function ConnectionsPage() {
       />
       <div className="flex-1 overflow-y-auto pb-2">
         <div className="mx-4 mt-4">
-          <p className="serif text-[19px] font-medium" style={{ color: "var(--ink)" }}>
+          <p className="serif text-[21px] font-medium" style={{ color: "var(--ink)" }}>
             Sixteen songs. <span className="block">Four hidden categories.</span>
           </p>
           {puzzle.theme_pull_quote ? (
-            <p className="serif italic text-[13px] mt-2" style={{ color: "var(--taupe)" }}>{puzzle.theme_pull_quote}</p>
+            <p className="serif italic text-[14px] mt-2" style={{ color: "var(--taupe)" }}>{puzzle.theme_pull_quote}</p>
           ) : null}
         </div>
         <Mistakes left={state.mistakesLeft} />
@@ -150,7 +150,7 @@ export default function ConnectionsPage() {
 
         {puzzle.marginalia_quote ? (
           <div
-            className="mx-4 mt-4 px-3 py-2 serif italic text-[12.5px]"
+            className="mx-4 mt-4 px-3 py-2 serif italic text-[14px]"
             style={{ borderLeft: "2px solid var(--rust)", background: "var(--paper-2)", color: "var(--taupe)" }}
           >{puzzle.marginalia_quote}</div>
         ) : null}
@@ -158,7 +158,7 @@ export default function ConnectionsPage() {
         {state.solved.length > 0 ? (
           <div className="mx-4 mt-3 space-y-1">
             {state.solved.map((c) => (
-              <div key={c.name} className="serif text-[14px] px-3 py-2 rounded-[4px]" style={{ background: "var(--rust)", color: "var(--paper)" }}>
+              <div key={c.name} className="serif text-[15px] px-3 py-2 rounded-[4px]" style={{ background: "var(--rust)", color: "var(--paper)" }}>
                 {c.name.toUpperCase()} — {c.members.join(", ")}
               </div>
             ))}

@@ -31,7 +31,7 @@ export function MiniPill() {
           />
         ))}
       </div>
-      <div className="serif italic text-[11px] truncate max-w-[120px]" style={{ color: "var(--ink)" }}>
+      <div className="serif italic text-[12px] truncate max-w-[140px]" style={{ color: "var(--ink)" }}>
         {np.current.title}
       </div>
       <PlatformIcons links={np.current.streaming_links} source="mini" />
