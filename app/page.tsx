@@ -63,7 +63,7 @@ export default async function HomePage() {
           <span>TODAY&apos;S SIX</span>
           <span className="flex-1 h-px" style={{ background: "var(--hair)" }} />
         </div>
-        <div className="mx-4 mt-3 space-y-[14px]">
+        <div className="mx-4 mt-3 flex flex-col gap-[14px]">
           {GAMES.map((g) => (
             <GameCard key={g.i} index={g.i} kicker={g.kicker} title={g.title} subtitle={g.subtitle} href={g.href} comingSoon={g.comingSoon} />
           ))}

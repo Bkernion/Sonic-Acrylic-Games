@@ -33,5 +33,5 @@ export function GameCard({ index, kicker, title, subtitle, href, comingSoon }: P
       </div>
     </div>
   );
-  return href ? <Link href={href}>{inner}</Link> : inner;
+  return href ? <Link href={href} className="block">{inner}</Link> : inner;
 }
