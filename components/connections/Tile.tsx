@@ -12,16 +12,18 @@ export function Tile({ label, selected, disabled, onClick }: Props) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className="rounded-[3px] flex items-center justify-center text-center"
+      className="rounded-[3px] flex items-center justify-center text-center tile-cell"
       style={{
         aspectRatio: "1 / 1",
-        background: selected ? "var(--ink)" : "var(--paper-2)",
-        color: selected ? "var(--paper)" : "var(--ink)",
+        background: selected ? "var(--ink)" : "rgba(255, 241, 222, 0.7)",
+        color: selected ? "#FFF1DE" : "var(--ink)",
         border: `1px solid ${selected ? "var(--ink)" : "var(--hair-2)"}`,
         fontFamily: "var(--serif)",
-        fontSize: 10,
-        lineHeight: 1.1,
-        padding: 6,
+        fontSize: 11,
+        fontWeight: 500,
+        lineHeight: 1.05,
+        letterSpacing: "-0.02em",
+        padding: 4,
         cursor: disabled ? "default" : "pointer",
         userSelect: "none",
       }}

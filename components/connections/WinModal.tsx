@@ -68,8 +68,8 @@ export function WinModal({ stats, editionId, onClose }: { stats: Stats; editionI
       onClick={onClose}
     >
       <div
-        className="w-full rounded-[6px] p-5"
-        style={{ background: "var(--paper)", color: "var(--ink)", maxWidth: 380 }}
+        className="w-full rounded-[6px] p-5 surface-warm grain"
+        style={{ color: "var(--ink)", maxWidth: 380 }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mono uppercase text-[10px] tracking-[0.22em]" style={{ color: "var(--rust)" }}>
@@ -110,8 +110,8 @@ export function WinModal({ stats, editionId, onClose }: { stats: Stats; editionI
             <button
               type="submit"
               disabled={submitting || !email}
-              className="h-11 rounded-full mono uppercase text-[11px] tracking-[0.14em] font-medium"
-              style={{ background: "var(--rust)", color: "var(--paper)", opacity: submitting ? 0.7 : 1 }}
+              className="h-11 rounded-full mono uppercase text-[11px] tracking-[0.14em] font-medium glow-rust"
+              style={{ background: "var(--rust-gradient)", border: "1.5px solid transparent", color: "#FFF1DE", opacity: submitting ? 0.7 : 1 }}
             >
               {submitting ? "Sending…" : "Sign me up"}
             </button>
@@ -140,7 +140,7 @@ export function WinModal({ stats, editionId, onClose }: { stats: Stats; editionI
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="p-2 rounded-[6px]" style={{ background: "var(--paper-2)" }}>
+    <div className="p-2 rounded-[6px] surface-warm">
       <div className="mono uppercase text-[9px] tracking-[0.18em]" style={{ color: "var(--taupe)" }}>{label}</div>
       <div className="serif text-[18px] mt-1">{value}</div>
     </div>

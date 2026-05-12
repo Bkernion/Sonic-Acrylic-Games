@@ -45,8 +45,8 @@ export function FullRibbon() {
   if (!np.current) return null;
   return (
     <div
-      className="flex items-center gap-3 px-4 border-t"
-      style={{ height: 60, background: "var(--paper-2)", borderColor: "var(--hair)" }}
+      className="flex items-center gap-3 px-4 border-t surface-warm"
+      style={{ height: 60, borderColor: "var(--hair)" }}
     >
       <PlayPause />
       <Equalizer playing={np.isPlaying} />

@@ -10,13 +10,18 @@ export function StreakChip() {
       .then((d) => setCount(d.current ?? 0))
       .catch(() => setCount(0));
   }, []);
+  const lit = (count ?? 0) > 0;
   return (
     <span
-      className="inline-flex items-center gap-[6px] px-[10px] py-[4px] rounded-full mono text-[11px] uppercase tracking-[0.1em]"
-      style={{ border: "1px solid var(--ink)", color: "var(--ink)", background: "transparent" }}
+      className={`inline-flex items-center gap-[6px] px-[10px] py-[4px] rounded-full mono text-[11px] uppercase tracking-[0.1em] ${lit ? "glow-rust" : ""}`}
+      style={{
+        border: `1px solid ${lit ? "transparent" : "var(--ink)"}`,
+        background: lit ? "var(--rust-gradient)" : "transparent",
+        color: lit ? "#FFF1DE" : "var(--ink)",
+      }}
       aria-label={`Current streak ${count ?? 0} days`}
     >
-      <span style={{ color: "var(--rust)" }}>◆</span>
+      <span style={{ color: lit ? "#FFF1DE" : "var(--rust)" }}>◆</span>
       <span>{count ?? "–"}</span>
     </span>
   );

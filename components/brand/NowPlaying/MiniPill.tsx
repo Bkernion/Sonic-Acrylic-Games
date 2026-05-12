@@ -8,8 +8,8 @@ export function MiniPill() {
   if (!np.current) return null;
   return (
     <div
-      className="flex items-center gap-2 px-2 py-1 rounded-full border"
-      style={{ background: "var(--paper-2)", borderColor: "var(--hair-2)" }}
+      className="flex items-center gap-2 px-2 py-1 rounded-full border surface-warm"
+      style={{ borderColor: "var(--hair-2)" }}
     >
       <button
         onClick={np.toggle}
