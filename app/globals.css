@@ -43,18 +43,25 @@ html, body { background: #1A1A1A; }
   position: relative;
 }
 
-/* Faint swirl underlay — adds the "lava-lamp" psychedelic texture */
+/* Faint swirl underlay — concentric "rings" with slow propagating drift */
 .stage::before {
   content: '';
   position: absolute; inset: 0;
   background-image:
-    repeating-radial-gradient(circle at 30% 20%, transparent 0, rgba(230,58,189,0.05) 14px, transparent 28px),
-    repeating-radial-gradient(circle at 80% 80%, transparent 0, rgba(78,217,229,0.06) 18px, transparent 36px);
+    repeating-radial-gradient(circle at 30% 20%, transparent 0, rgba(230,58,189,0.06) 14px, transparent 28px),
+    repeating-radial-gradient(circle at 80% 80%, transparent 0, rgba(78,217,229,0.07) 18px, transparent 36px);
+  background-size: 240px 240px, 360px 360px;
   pointer-events: none;
   mix-blend-mode: multiply;
   z-index: 0;
+  animation: swirl-drift 36s ease-in-out infinite;
 }
 .stage > * { position: relative; z-index: 1; }
+@keyframes swirl-drift {
+  0%   { background-position: 0px 0px, 0px 0px; }
+  50%  { background-position: 120px 60px, -180px -90px; }
+  100% { background-position: 0px 0px, 0px 0px; }
+}
 
 /* Type defaults: tighten + weight under stage */
 .stage .serif { font-family: var(--serif); letter-spacing: -0.028em; font-weight: 600; }
@@ -63,9 +70,13 @@ html, body { background: #1A1A1A; }
 /* Hairlines */
 .hr { height: 1px; background: var(--hair); border: 0; }
 
-/* Equalizer animation for NowPlaying */
-@keyframes eq-bar { 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
-.eq-bar { transform-origin: bottom; animation: eq-bar var(--eq-duration, 1.4s) ease-in-out infinite; }
+/* Equalizer — propagating wave: same duration, staggered animation-delay per bar */
+@keyframes eq-bar { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+.eq-bar {
+  transform-origin: bottom;
+  animation: eq-bar var(--eq-duration, 1.1s) ease-in-out infinite;
+  animation-delay: var(--eq-delay, 0s);
+}
 .eq-paused .eq-bar { animation-play-state: paused; transform: scaleY(0.5); }
 
 /* Paper-2 surface helper — apply this class to any element that should get the warm gradient */
@@ -76,6 +87,25 @@ html, body { background: #1A1A1A; }
 /* Rust pill glow */
 .glow-rust {
   box-shadow: var(--rust-glow);
+}
+
+/* Plasmatic moving gradient — magenta/peach/pink lava-lamp wash for rust CTAs */
+.cta-plasma {
+  background:
+    radial-gradient(ellipse 70% 60% at 25% 30%, rgba(255, 143, 224, 0.95) 0%, rgba(255, 143, 224, 0) 60%),
+    radial-gradient(ellipse 70% 60% at 75% 70%, rgba(255, 138, 31, 0.90) 0%, rgba(255, 138, 31, 0) 60%),
+    radial-gradient(ellipse 90% 70% at 50% 50%, rgba(230, 58, 189, 0.60) 0%, rgba(230, 58, 189, 0) 70%),
+    linear-gradient(95deg, #C8228F 0%, #E63ABD 100%);
+  background-size: 200% 200%, 200% 200%, 220% 220%, 100% 100%;
+  background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%;
+  animation: plasma-flow 8s ease-in-out infinite;
+  color: #FFF1DE;
+}
+@keyframes plasma-flow {
+  0%   { background-position: 0% 20%,   100% 100%, 30% 70%,  0% 0%; }
+  33%  { background-position: 60% 80%,  40% 30%,  80% 20%,  0% 0%; }
+  66%  { background-position: 30% 50%,  80% 70%,  20% 90%,  0% 0%; }
+  100% { background-position: 0% 20%,   100% 100%, 30% 70%,  0% 0%; }
 }
 
 /* Grain noise overlay — apply via a wrapping div with class "grain" */

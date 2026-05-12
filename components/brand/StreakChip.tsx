@@ -13,11 +13,10 @@ export function StreakChip() {
   const lit = (count ?? 0) > 0;
   return (
     <span
-      className={`inline-flex items-center gap-[6px] px-[10px] py-[4px] rounded-full mono text-[11px] uppercase tracking-[0.1em] ${lit ? "glow-rust" : ""}`}
+      className={`inline-flex items-center gap-[6px] px-[10px] py-[4px] rounded-full mono text-[11px] uppercase tracking-[0.1em] ${lit ? "cta-plasma glow-rust" : ""}`}
       style={{
         border: `1px solid ${lit ? "transparent" : "var(--ink)"}`,
-        background: lit ? "var(--rust-gradient)" : "transparent",
-        color: lit ? "#FFF1DE" : "var(--ink)",
+        ...(lit ? {} : { background: "transparent", color: "var(--ink)" }),
       }}
       aria-label={`Current streak ${count ?? 0} days`}
     >

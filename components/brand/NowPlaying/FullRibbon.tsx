@@ -18,14 +18,17 @@ function PlayPause() {
 }
 
 function Equalizer({ playing }: { playing: boolean }) {
+  // Propagating wave: same duration, staggered animation-delay so motion
+  // ripples left-to-right across the bars.
   return (
     <div className={`flex items-end gap-[2px] h-[16px] ${playing ? "" : "eq-paused"}`}>
-      {[1.2, 1.3, 1.4, 1.5, 1.6].map((d, i) => (
+      {[0, 0.11, 0.22, 0.33, 0.44].map((delay, i) => (
         <span
           key={i}
           className="eq-bar"
           style={{
-            ["--eq-duration" as never]: `${d}s`,
+            ["--eq-duration" as never]: "1.1s",
+            ["--eq-delay" as never]: `${delay}s`,
             width: 3, height: "100%", background: "var(--rust)", borderRadius: 1,
           } as React.CSSProperties}
         />

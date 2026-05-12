@@ -26,12 +26,11 @@ export function ActionRow({ onShuffle, onClear, onSubmit, submitDisabled }: Prop
       <button
         onClick={onSubmit}
         disabled={submitDisabled}
-        className={submitDisabled ? "" : "glow-rust"}
+        className={submitDisabled ? "" : "cta-plasma glow-rust"}
         style={{
           ...btnBase, flex: 1.4,
           border: submitDisabled ? "1.5px solid var(--rust)" : "1.5px solid transparent",
-          background: submitDisabled ? "transparent" : "var(--rust-gradient)",
-          color: submitDisabled ? "var(--rust)" : "#FFF1DE",
+          ...(submitDisabled ? { background: "transparent", color: "var(--rust)" } : {}),
           opacity: submitDisabled ? 0.6 : 1,
         }}
       >Submit</button>

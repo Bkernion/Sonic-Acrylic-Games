@@ -48,7 +48,7 @@ export default async function HomePage() {
         {row ? (
           <Hero
             editionLabel={fmtEdition(String(row.date).slice(0, 10), row.edition_no)}
-            headline={"Tonight's table of five."}
+            headline={"Today's Artists"}
             lineup={row.lineup_artists}
             themeQuote={row.theme_pull_quote}
           />

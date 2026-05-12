@@ -110,8 +110,8 @@ export function WinModal({ stats, editionId, onClose }: { stats: Stats; editionI
             <button
               type="submit"
               disabled={submitting || !email}
-              className="h-11 rounded-full mono uppercase text-[11px] tracking-[0.14em] font-medium glow-rust"
-              style={{ background: "var(--rust-gradient)", border: "1.5px solid transparent", color: "#FFF1DE", opacity: submitting ? 0.7 : 1 }}
+              className="cta-plasma glow-rust h-11 rounded-full mono uppercase text-[11px] tracking-[0.14em] font-medium"
+              style={{ border: "1.5px solid transparent", opacity: submitting ? 0.7 : 1 }}
             >
               {submitting ? "Sending…" : "Sign me up"}
             </button>
