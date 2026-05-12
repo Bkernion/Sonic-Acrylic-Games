@@ -9,7 +9,7 @@ import { sql } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 const GAMES = [
-  { i: 1, kicker: "CONNECT", title: "Sixteen songs from tonight's five", subtitle: "Sort them into four hidden groups.", href: "/connections" },
+  { i: 1, kicker: "CONNECT", title: "Sixteen songs from tonight's five", subtitle: "Sort songs into four hidden categories", href: "/connections" },
   { i: 2, kicker: "SPELL", title: "A word the lineup keeps reaching for", subtitle: "Six guesses. Memory only.", comingSoon: "soon" },
   { i: 3, kicker: "LYRIC", title: "One missing word, one chance", subtitle: "From a chorus you almost remember.", comingSoon: "soon" },
   { i: 4, kicker: "ATTRIBUTE", title: "Who said it?", subtitle: "Match the quote to one of tonight's voices.", comingSoon: "soon" },
