@@ -75,6 +75,16 @@ export function applyGuess(
   };
 }
 
+/** Push every unsolved category into `solved` and clear remaining tiles.
+ * Used on loss so the answers can be revealed in the same rendering path as a win. */
+export function revealAll(s: ConnectionsState, categories: Category[]): ConnectionsState {
+  const solvedNames = new Set(s.solved.map((c) => c.name));
+  const remaining = categories
+    .filter((c) => !solvedNames.has(c.name))
+    .sort((a, b) => a.difficulty - b.difficulty);
+  return { ...s, tiles: [], selected: [], solved: [...s.solved, ...remaining] };
+}
+
 /** Server-side stateless validator. Returns just the result and matched category if any. */
 export function checkGuess(
   guess: string[],

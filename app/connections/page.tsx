@@ -8,7 +8,7 @@ import { Mistakes } from "@/components/connections/Mistakes";
 import { ActionRow } from "@/components/connections/ActionRow";
 import { WinModal } from "@/components/connections/WinModal";
 import { MiniPill } from "@/components/brand/NowPlaying/MiniPill";
-import { initState, toggleTile, clearSelection, type ConnectionsState, type Category } from "@/lib/connections";
+import { initState, toggleTile, clearSelection, revealAll, type ConnectionsState, type Category } from "@/lib/connections";
 import { seededShuffle } from "@/lib/shuffle";
 
 type PuzzleResp = {
@@ -19,6 +19,15 @@ type PuzzleResp = {
   marginalia_quote: string | null;
   tiles: string[];
 };
+
+function colorForDifficulty(d: 1 | 2 | 3 | 4): { bg: string; fg: string } {
+  switch (d) {
+    case 1: return { bg: "var(--paper-3)", fg: "var(--ink)" };
+    case 2: return { bg: "var(--rust-3)", fg: "var(--ink)" };
+    case 3: return { bg: "var(--rust)",   fg: "var(--paper)" };
+    case 4: return { bg: "var(--ink)",    fg: "var(--paper)" };
+  }
+}
 
 export default function ConnectionsPage() {
   const [puzzle, setPuzzle] = useState<PuzzleResp | null>(null);
@@ -83,18 +92,30 @@ export default function ConnectionsPage() {
   // Open modal + advance streak when terminal
   useEffect(() => {
     if (!state) return;
-    if (state.status === "won" || state.status === "lost") {
-      const open = async () => {
-        if (state.status === "won") {
-          const r = await fetch("/api/streak/complete", { method: "POST" });
-          if (r.ok) {
-            const d = await r.json();
-            setStreak({ current: d.current, longest: d.longest });
-          }
+    if (state.status === "won") {
+      const finish = async () => {
+        const r = await fetch("/api/streak/complete", { method: "POST" });
+        if (r.ok) {
+          const d = await r.json();
+          setStreak({ current: d.current, longest: d.longest });
         }
         setModalOpen(true);
       };
-      void open();
+      void finish();
+    } else if (state.status === "lost") {
+      const reveal = async () => {
+        try {
+          const r = await fetch("/api/puzzle/reveal", { cache: "no-store" });
+          if (r.ok) {
+            const d = await r.json() as { categories: Category[] };
+            setState((s) => s ? revealAll(s, d.categories) : s);
+          }
+        } catch {}
+        // Let the reveal land visually before the modal opens.
+        await new Promise((res) => setTimeout(res, 1500));
+        setModalOpen(true);
+      };
+      void reveal();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.status]);
@@ -156,12 +177,16 @@ export default function ConnectionsPage() {
         ) : null}
 
         {state.solved.length > 0 ? (
-          <div className="mx-4 mt-3 space-y-1">
-            {state.solved.map((c) => (
-              <div key={c.name} className="serif text-[15px] px-3 py-2 rounded-[4px]" style={{ background: "var(--rust)", color: "var(--paper)" }}>
-                {c.name.toUpperCase()} — {c.members.join(", ")}
-              </div>
-            ))}
+          <div className="mx-4 mt-3 flex flex-col gap-2">
+            {state.solved.map((c) => {
+              const { bg, fg } = colorForDifficulty(c.difficulty);
+              return (
+                <div key={c.name} className="px-3 py-2 rounded-[6px]" style={{ background: bg, color: fg }}>
+                  <div className="mono uppercase text-[10px] tracking-[0.18em] opacity-90">{c.name}</div>
+                  <div className="serif text-[15px] mt-[2px]">{c.members.join(" · ")}</div>
+                </div>
+              );
+            })}
           </div>
         ) : null}
 
