@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Sonic Acrylic Games — Mid-fi</title>
+<link rel="stylesheet" href="midfi/tokens.css" />
+<style>
+  body { margin: 0; background: #f0eee9; font-family: -apple-system, system-ui, sans-serif; }
+  .intro {
+    max-width: 720px; margin: 40px auto 24px; padding: 0 24px;
+    color: #2a2823;
+  }
+  .intro h1 {
+    font-family: 'Newsreader', Georgia, serif; font-size: 36px; line-height: 1.1;
+    font-weight: 600; letter-spacing: -0.02em; margin: 0 0 12px;
+  }
+  .intro .kicker {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: #C26B3E; margin-bottom: 10px;
+  }
+  .intro p {
+    font-family: 'Newsreader', Georgia, serif; font-size: 17px; line-height: 1.5;
+    color: #5C5246; margin: 0 0 12px;
+  }
+  .intro .system {
+    margin-top: 24px; padding: 16px 18px; background: #EAE3D2; border-left: 3px solid #C26B3E;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 13px; line-height: 1.55; color: #2a2823;
+  }
+  .intro .system b { font-weight: 600; }
+  .intro .system code {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; background: rgba(0,0,0,0.06);
+    padding: 1px 5px; border-radius: 3px;
+  }
+</style>
+</head>
+<body data-screen-label="Mid-fi canvas">
+
+<div class="intro">
+  <div class="kicker">SONIC ACRYLIC GAMES · MID-FI PASS · ED.412</div>
+  <h1>Eight screens, two platforms, one worldview.</h1>
+  <p>Newsprint cream, ink black, a single rust accent — a daily paper for the kind of fan who reads liner notes. Each screen below is shown in iOS and Android chrome so the brand chrome <em>inside</em> the app stays the same across both.</p>
+  <div class="system">
+    <b>System</b> · Type: Newsreader (display serif), IBM Plex Sans (body), IBM Plex Mono (labels, timestamps, kickers). Color: <code>#F2EDE2</code> paper · <code>#1A1A1A</code> ink · <code>#C26B3E</code> rust · <code>#5C5246</code> taupe.
+    Voice: editorial. Every screen has a kicker, a literary line, a clean interaction. Music is omnipresent via the bottom-of-screen NowPlaying ribbon (full bar on home/win, mini-pill inside games to keep tile real estate). Placeholder photography uses duotone-striped stand-ins until real art arrives.
+  </div>
+</div>
+
+<div id="canvas-root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="android-frame.jsx"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="midfi/tweaks-panel.jsx"></script>
+<script type="text/babel" src="midfi/lib.jsx"></script>
+<script type="text/babel" src="midfi/screens.jsx"></script>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "mood": "psychedelic"
+}/*EDITMODE-END*/;
+const W = 380, H = 800;
+
+// Wrap a Screen component in iOS chrome. The iOS frame puts its status bar
+// (~44px) and home indicator (~34px) as absolute overlays, so we inset the
+// content with matching padding to keep our AppBar and NowPlaying ribbon clear.
+function IOSWrap({ children }) {
+  return (
+    <IOSDevice width={W} height={H}>
+      <div style={{
+        height: '100%', display: 'flex', flexDirection: 'column',
+        paddingTop: 54, paddingBottom: 34, boxSizing: 'border-box',
+        background: 'var(--paper)',
+      }}>
+        {children}
+      </div>
+    </IOSDevice>
+  );
+}
+
+// Wrap in Android chrome
+function AndroidWrap({ children }) {
+  return (
+    <AndroidDevice width={W} height={H}>
+      {children}
+    </AndroidDevice>
+  );
+}
+
+const SCREENS = [
+  { id: 'home',    title: '01 · Home',         sub: 'Newsfeed — today\'s six games, framed as a daily edition.',           comp: HomeNewsfeed },
+  { id: 'connect', title: '02 · Connections',  sub: 'Sixteen songs, four hidden groups. Marginalia note as soft hint.',     comp: ConnectionsScreen },
+  { id: 'spell',   title: '03 · Five Letters', sub: 'A five-letter word hidden inside a chorus. Six guesses.',              comp: SpellScreen },
+  { id: 'lyric',   title: '04 · Fill the Gap', sub: 'One missing word in a famous lyric. One try, four decoys.',            comp: LyricScreen },
+  { id: 'order',   title: '05 · Chronology',   sub: 'Drag five records into the order they reshaped the room.',             comp: OrderScreen },
+  { id: 'attr',    title: '06 · Attribution',  sub: 'A quote with no name attached. Pick who could have said it.',          comp: AttrScreen },
+  { id: 'influ',   title: '07 · Influence',    sub: 'Draw threads from teacher to pupil — five lines to trace.',            comp: InfluenceScreen },
+  { id: 'win',     title: '08 · Solved',       sub: 'The win surface. Stats, share card, tip jar, and the song keeps playing.', comp: WinScreen },
+];
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  React.useEffect(() => {
+    const psyche = t.mood === 'psychedelic' || t.mood === 'psyche-powder';
+    document.body.classList.toggle('mood-psyche', psyche);
+    document.body.classList.toggle('mood-powder', t.mood === 'psyche-powder');
+  }, [t.mood]);
+
+  return (
+    <React.Fragment>
+      <TweaksPanel title="Tweaks">
+        <TweakSection title="Mood">
+          <TweakRadio
+            value={t.mood}
+            onChange={v => setTweak('mood', v)}
+            options={[
+              { value: 'editorial', label: 'Editorial' },
+              { value: 'psychedelic', label: 'Cobalt' },
+              { value: 'psyche-powder', label: 'Powder' },
+            ]}
+          />
+        </TweakSection>
+      </TweaksPanel>
+      <DesignCanvas
+        title="Sonic Acrylic Games — Mid-fi"
+        subtitle="Eight screens × iOS + Android. Built on the Newsreader + Plex system."
+      >
+        {SCREENS.map(({ id, title, sub, comp: Comp }) => (
+          <DCSection key={id} id={id} title={title} subtitle={sub}>
+            <DCArtboard id={`${id}-ios`} label="iOS" width={W} height={H}>
+              <IOSWrap><Comp /></IOSWrap>
+            </DCArtboard>
+            <DCArtboard id={`${id}-android`} label="Android" width={W} height={H}>
+              <AndroidWrap><Comp /></AndroidWrap>
+            </DCArtboard>
+          </DCSection>
+        ))}
+      </DesignCanvas>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('canvas-root')).render(<App />);
+</script>
+</body>
+</html>
