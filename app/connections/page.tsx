@@ -23,9 +23,9 @@ type PuzzleResp = {
 function colorForDifficulty(d: 1 | 2 | 3 | 4): { bg: string; fg: string } {
   switch (d) {
     case 1: return { bg: "var(--paper-3)", fg: "var(--ink)" };
-    case 2: return { bg: "var(--rust-3)", fg: "var(--ink)" };
-    case 3: return { bg: "var(--rust)",   fg: "var(--paper)" };
-    case 4: return { bg: "var(--ink)",    fg: "var(--paper)" };
+    case 2: return { bg: "var(--hair)",    fg: "var(--ink-2)" };
+    case 3: return { bg: "var(--ink)",     fg: "var(--paper)" };
+    case 4: return { bg: "var(--rust)",    fg: "var(--paper)" };
   }
 }
 
@@ -132,8 +132,8 @@ export default function ConnectionsPage() {
     return (
       <>
         <AppBar wordmark={APPBAR_WORDMARK} backHref="/" rightSlot={<StreakChip />} />
-        <div className="mx-4 mt-8 serif italic" style={{ color: "var(--taupe)" }}>
-          No puzzle for today yet — check back at midnight ET.
+        <div className="mx-4 mt-8 mono" style={{ color: "var(--taupe)", fontSize: 11, textTransform: "uppercase" }}>
+          NO PUZZLE FOR TODAY YET — CHECK BACK AT MIDNIGHT ET.
         </div>
       </>
     );
@@ -155,11 +155,11 @@ export default function ConnectionsPage() {
       <div className="flex-1 overflow-y-auto pb-2">
         {/* Prompt + subtitle */}
         <div style={{ padding: 14 }}>
-          <p className="serif" style={{ fontSize: 21, lineHeight: 1.15, fontWeight: 500, color: "var(--ink)" }}>
+          <p className="mono" style={{ fontSize: 21, lineHeight: 1.15, fontWeight: 500, color: "var(--ink)", textTransform: "uppercase" }}>
             Sixteen songs.<br />Four hidden categories.
           </p>
-          <p className="serif italic" style={{ fontSize: 14, lineHeight: 1.35, color: "var(--taupe)", marginTop: 4 }}>
-            {puzzle.theme_pull_quote ?? "Sort them into four hidden groups."}
+          <p className="mono" style={{ fontSize: 11, lineHeight: 1.4, color: "var(--rust)", marginTop: 4, textTransform: "uppercase", fontStyle: "normal", letterSpacing: "0.04em" }}>
+            TAP 4 TILES. SUBMIT TO CHECK. 4 WRONG ENDS THE GAME.
           </p>
         </div>
 
@@ -177,14 +177,14 @@ export default function ConnectionsPage() {
         {/* Marginalia note */}
         {puzzle.marginalia_quote ? (
           <div
-            className="surface-warm mx-4 mt-4"
-            style={{ borderLeft: "2px solid var(--rust)", padding: "10px 12px" }}
+            className="mx-4 mt-4"
+            style={{ borderLeft: "2px solid var(--ink)", padding: "10px 12px", background: "var(--paper-2)" }}
           >
-            <div className="mono" style={{ fontSize: 9.5, color: "var(--rust)", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+            <div className="mono" style={{ fontSize: 9.5, color: "var(--ink)", letterSpacing: "0.2em", textTransform: "uppercase" }}>
               MARGINALIA · 14
             </div>
-            <div className="serif italic" style={{ fontSize: 14, lineHeight: 1.35, color: "var(--ink)", marginTop: 3 }}>
-              &ldquo;{puzzle.marginalia_quote}&rdquo;
+            <div className="mono" style={{ fontSize: 12, lineHeight: 1.35, color: "var(--rust)", marginTop: 3, textTransform: "uppercase", fontStyle: "normal", letterSpacing: "0.04em" }}>
+              {puzzle.marginalia_quote}
             </div>
           </div>
         ) : null}
@@ -195,9 +195,9 @@ export default function ConnectionsPage() {
             {state.solved.map((c) => {
               const { bg, fg } = colorForDifficulty(c.difficulty);
               return (
-                <div key={c.name} className="px-3 py-2 rounded-[6px]" style={{ background: bg, color: fg }}>
+                <div key={c.name} className="px-3 py-2" style={{ background: bg, color: fg, borderRadius: 0 }}>
                   <div className="mono uppercase" style={{ fontSize: 10, letterSpacing: "0.18em", opacity: 0.9 }}>{c.name}</div>
-                  <div className="serif" style={{ fontSize: 15, marginTop: 2 }}>{c.members.join(" · ")}</div>
+                  <div className="mono uppercase" style={{ fontSize: 11, marginTop: 2, letterSpacing: "0.04em" }}>{c.members.join(" · ")}</div>
                 </div>
               );
             })}

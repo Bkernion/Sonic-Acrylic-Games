@@ -9,8 +9,8 @@ function PlayPause() {
     <button
       onClick={np.toggle}
       aria-label={np.isPlaying ? "Pause" : "Play"}
-      className="inline-flex items-center justify-center rounded-full flex-shrink-0"
-      style={{ width: 30, height: 30, background: "var(--ink)", color: "var(--paper)", fontSize: 11 }}
+      className="inline-flex items-center justify-center flex-shrink-0"
+      style={{ width: 30, height: 30, background: "var(--ink)", color: "var(--paper)", fontSize: 11, borderRadius: 0 }}
     >
       <span aria-hidden>{np.isPlaying ? "❚❚" : "▶"}</span>
     </button>
@@ -33,8 +33,8 @@ function Equalizer({ playing }: { playing: boolean }) {
             ["--eq-duration" as never]: `${1.2 + i * 0.1}s`,
             width: 2,
             height: h,
-            background: "var(--rust)",
-            borderRadius: 1,
+            background: "var(--ink)",
+            borderRadius: 0,
             transformOrigin: "bottom",
           } as React.CSSProperties}
         />
@@ -60,15 +60,21 @@ export function FullRibbon() {
       <PlayPause />
       <Equalizer playing={np.isPlaying} />
       <div className="flex-1 min-w-0">
-        <div className="serif italic truncate" style={{ fontSize: 14, lineHeight: 1.1, color: "var(--ink)" }}>
-          &ldquo;{np.current.title}&rdquo;
+        <div
+          className="mono truncate"
+          style={{ fontSize: 12, fontWeight: 500, lineHeight: 1.1, color: "var(--rust)", textTransform: "uppercase", letterSpacing: "0.04em", fontStyle: "normal" }}
+        >
+          {np.current.title}
         </div>
-        <div className="mono uppercase truncate" style={{ fontSize: 9.5, color: "var(--taupe)", letterSpacing: "0.18em", marginTop: 2 }}>
+        <div
+          className="mono uppercase truncate"
+          style={{ fontSize: 9.5, color: "var(--taupe-2)", letterSpacing: "0.18em", marginTop: 2 }}
+        >
           {np.current.artist.toUpperCase()}
         </div>
       </div>
       <PlatformIcons links={np.current.streaming_links} source="full" />
-      <div className="mono" style={{ fontSize: 9.5, color: "var(--taupe)", letterSpacing: "0.18em", flexShrink: 0 }}>
+      <div className="mono" style={{ fontSize: 9.5, color: "var(--taupe)", letterSpacing: "0.18em", flexShrink: 0, textTransform: "uppercase" }}>
         {fmt(np.positionSec)}
       </div>
     </div>

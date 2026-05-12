@@ -11,7 +11,7 @@ export function Mistakes({ left }: { left: number }) {
             style={{
               width: 9,
               height: 9,
-              borderRadius: 999,
+              borderRadius: 0,
               background: i < left ? "var(--ink)" : "var(--hair)",
             }}
           />

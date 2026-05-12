@@ -69,73 +69,84 @@ export function WinModal({ stats, editionId, onClose }: { stats: Stats; editionI
       onClick={onClose}
     >
       <div
-        className="w-full rounded-[6px] p-5 surface-warm grain relative modal-box-in"
-        style={{ color: "var(--ink)", maxWidth: 380 }}
+        className="w-full p-5 surface-warm relative modal-box-in"
+        style={{ color: "var(--ink)", maxWidth: 380, borderRadius: 0, border: "1px solid var(--hair-2)" }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* X close button */}
         <button
           onClick={onClose}
           aria-label="Close"
-          className="absolute top-2 right-2 inline-flex items-center justify-center rounded-full"
+          className="absolute top-2 right-2 inline-flex items-center justify-center"
           style={{
             width: 30, height: 30,
             color: "var(--ink)",
-            background: "rgba(255,255,255,0.4)",
+            background: "transparent",
             border: "1px solid var(--hair-2)",
+            borderRadius: 0,
             fontSize: 14, lineHeight: 1,
           }}
         >
           <span aria-hidden>✕</span>
         </button>
 
-        {/* Rust mono kicker */}
-        <div className="mono uppercase pr-10" style={{ fontSize: 10, letterSpacing: "0.22em", color: "var(--rust)" }}>
+        {/* Mono kicker */}
+        <div className="mono uppercase pr-10" style={{ fontSize: 10, letterSpacing: "0.22em", color: "var(--ink)" }}>
           {stats.outcome === "won" ? "SOLVED" : "TOMORROW"} · {mm}:{ss}
         </div>
 
-        {/* Headline — 32px */}
-        <h2 className="serif font-semibold" style={{ fontSize: 32, lineHeight: 1.05, marginTop: 8 }}>
-          {stats.outcome === "won" ? "Four groups solved." : "No groups, no sweat."}
+        {/* Headline — 28px gold mono uppercase */}
+        <h2
+          className="mono"
+          style={{ fontSize: 28, lineHeight: 1.05, marginTop: 8, fontWeight: 700, textTransform: "uppercase", color: "var(--ink)", letterSpacing: "0.02em" }}
+        >
+          {stats.outcome === "won" ? "Four groups solved," : "No groups, no sweat."}
+          {stats.outcome === "won" ? <br /> : null}
+          {stats.outcome === "won" ? "no missteps." : null}
         </h2>
 
-        {/* Italic subline — 13px */}
-        <p className="serif italic" style={{ fontSize: 13, lineHeight: 1.4, color: "var(--taupe)", marginTop: 8 }}>
+        {/* Subline — white mono uppercase */}
+        <p
+          className="mono"
+          style={{ fontSize: 12, lineHeight: 1.4, color: "var(--rust)", marginTop: 8, textTransform: "uppercase", fontStyle: "normal", letterSpacing: "0.04em" }}
+        >
           {stats.outcome === "won"
-            ? "Stay for the music. We open the door again tomorrow at midnight ET."
-            : "Listen on for a minute. Tomorrow’s lineup is on its way."}
+            ? "The record kept playing the whole time. It still is."
+            : "Listen on for a minute. Tomorrow's lineup is on its way."}
         </p>
 
-        {/* Stats — 2×2 grid, 9px label / 17px value */}
+        {/* Stats — 2×2 grid */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginTop: 16 }}>
-          <Stat label="STREAK"   value={`${stats.streakCurrent}`} />
+          <Stat label="STREAK"   value={`${stats.streakCurrent} DAYS`} />
           <Stat label="LONGEST"  value={`${stats.streakLongest}`} />
           <Stat label="TIME"     value={`${mm}:${ss}`} />
           <Stat label="MISTAKES" value={`${stats.mistakesUsed}/4`} />
         </div>
 
-        {/* Streak strip — only shown on won + streak > 0 */}
+        {/* Streak strip */}
         {showStreak ? (
-          <div style={{ padding: "14px 14px 16px", background: "var(--ink)", color: "var(--paper)", borderRadius: 6, marginTop: 16 }}>
+          <div style={{ padding: "14px 14px 16px", background: "var(--ink)", color: "var(--paper)", borderRadius: 0, marginTop: 16 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-              <span className="mono" style={{ fontSize: 10, letterSpacing: "0.22em", color: "var(--rust-3)" }}>STREAK</span>
-              <span className="serif" style={{ fontSize: 14, fontWeight: 500 }}>{streakN} days, unbroken</span>
+              <span className="mono" style={{ fontSize: 10, letterSpacing: "0.22em", color: "var(--paper)" }}>STREAK</span>
+              <span className="mono" style={{ fontSize: 12, fontWeight: 500, color: "var(--paper)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                {streakN} DAYS, UNBROKEN
+              </span>
             </div>
             <div style={{
               display: "grid",
-              gridTemplateColumns: `repeat(${streakN}, 1fr)`,
+              gridTemplateColumns: `repeat(${Math.min(streakN, 20)}, 1fr)`,
               gap: 4,
               marginTop: 10,
             }}>
-              {Array.from({ length: streakN }).map((_, i) => (
+              {Array.from({ length: Math.min(streakN, 20) }).map((_, i) => (
                 <div
                   key={i}
                   style={{
                     aspectRatio: "1",
                     background: "var(--rust)",
-                    opacity: i === streakN - 1 ? 1 : 0.55 + (i / streakN) * 0.4,
-                    borderRadius: 2,
-                    boxShadow: i === streakN - 1 ? "0 0 0 1.5px var(--paper)" : "none",
+                    opacity: i === Math.min(streakN, 20) - 1 ? 1 : 0.4 + (i / Math.min(streakN, 20)) * 0.55,
+                    borderRadius: 0,
+                    boxShadow: i === Math.min(streakN, 20) - 1 ? "0 0 0 1.5px var(--ink)" : "none",
                   }}
                 />
               ))}
@@ -156,41 +167,60 @@ export function WinModal({ stats, editionId, onClose }: { stats: Stats; editionI
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@somewhere.com"
-              className="px-3 py-2 rounded-[4px] outline-none"
-              style={{ background: "var(--paper-2)", border: "1px solid var(--hair-2)", color: "var(--ink)" }}
+              className="px-3 py-2 outline-none"
+              style={{
+                background: "var(--paper)",
+                border: "1px solid var(--hair)",
+                color: "var(--ink)",
+                borderRadius: 0,
+                fontFamily: "var(--mono)",
+                fontSize: 11,
+                textTransform: "uppercase",
+                letterSpacing: "0.04em",
+              }}
             />
-            {error ? <div className="mono" style={{ fontSize: 10, color: "var(--rust-2)" }}>{error}</div> : null}
+            {error ? <div className="mono uppercase" style={{ fontSize: 10, color: "var(--rust-2)" }}>{error}</div> : null}
             <button
               type="submit"
               disabled={submitting || !email}
-              className="cta-plasma glow-rust rounded-full mono uppercase font-medium"
+              className="mono uppercase font-medium"
               style={{
                 height: 44,
-                border: "1.5px solid transparent",
+                background: "var(--rust)",
+                color: "var(--paper)",
+                border: "1.5px solid var(--rust)",
+                borderRadius: 0,
                 fontSize: 11,
                 letterSpacing: "0.14em",
                 opacity: submitting ? 0.7 : 1,
+                fontFamily: "var(--mono)",
+                cursor: submitting || !email ? "default" : "pointer",
               }}
             >
-              {submitting ? "Sending…" : "Sign me up"}
+              {submitting ? "SENDING…" : "SIGN ME UP"}
             </button>
           </form>
         ) : (
-          <div className="serif italic" style={{ marginTop: 16, color: "var(--taupe)" }}>✓ See you tomorrow.</div>
+          <div className="mono uppercase" style={{ marginTop: 16, color: "var(--taupe)", fontSize: 11, letterSpacing: "0.04em", fontStyle: "normal" }}>
+            ✓ SEE YOU TOMORROW.
+          </div>
         )}
 
         {/* Share row */}
         <div className="flex items-center gap-2" style={{ marginTop: 16 }}>
           <button
             onClick={share}
-            className="rounded-full mono uppercase"
+            className="mono uppercase"
             style={{
               height: 40, padding: "0 12px",
               border: "1.5px solid var(--hair-2)", color: "var(--taupe)", background: "transparent",
+              borderRadius: 0,
               fontSize: 10, letterSpacing: "0.14em",
+              fontFamily: "var(--mono)",
+              cursor: "pointer",
             }}
           >
-            Share
+            SHARE
           </button>
           {np.current ? (
             <div className="flex items-center gap-2 ml-auto">
@@ -206,9 +236,9 @@ export function WinModal({ stats, editionId, onClose }: { stats: Stats; editionI
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="surface-warm" style={{ padding: "10px 12px", borderRadius: 4 }}>
+    <div className="surface-warm" style={{ padding: "10px 12px", borderRadius: 0, border: "1px solid var(--hair-2)" }}>
       <div className="mono uppercase" style={{ fontSize: 9, letterSpacing: "0.2em", color: "var(--taupe)" }}>{label}</div>
-      <div className="serif" style={{ fontSize: 17, fontWeight: 500, marginTop: 2 }}>{value}</div>
+      <div className="mono" style={{ fontSize: 17, fontWeight: 500, marginTop: 2, color: "var(--ink)", textTransform: "uppercase" }}>{value}</div>
     </div>
   );
 }

@@ -24,26 +24,26 @@ export function GameCard({ index, kicker, title, subtitle, href, comingSoon, isL
     >
       <div
         className="mono"
-        style={{ fontSize: 11, color: "var(--taupe)", marginTop: 4, width: 22, flexShrink: 0 }}
+        style={{ fontSize: 11, color: "var(--rust)", letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 4, width: 22, flexShrink: 0 }}
       >
         {index.toString().padStart(2, "0")}
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div
-          className="mono uppercase"
-          style={{ fontSize: 10, letterSpacing: "0.22em", color: "var(--rust)" }}
+          className="mono"
+          style={{ fontSize: 10, letterSpacing: "0.22em", color: "var(--ink)", textTransform: "uppercase" }}
         >
           {kicker}
         </div>
         <div
-          className="serif"
-          style={{ fontSize: 19, lineHeight: 1.15, marginTop: 2, fontWeight: 500, color: "var(--ink)" }}
+          className="mono"
+          style={{ fontSize: 16, lineHeight: 1.25, marginTop: 2, fontWeight: 500, color: "var(--ink)", textTransform: "uppercase", letterSpacing: "0.04em" }}
         >
           {title}
         </div>
         <div
-          className="serif italic"
-          style={{ fontSize: 13.5, lineHeight: 1.35, color: "var(--taupe)", marginTop: 3, fontWeight: 400 }}
+          className="mono"
+          style={{ fontSize: 11, lineHeight: 1.4, color: "var(--taupe)", marginTop: 3, fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.04em", fontStyle: "normal" }}
         >
           {subtitle}
         </div>
@@ -51,8 +51,8 @@ export function GameCard({ index, kicker, title, subtitle, href, comingSoon, isL
       <div
         style={{
           fontSize: 14,
-          color: comingSoon ? "var(--taupe)" : "var(--ink)",
-          opacity: comingSoon ? 0.5 : 1,
+          color: comingSoon ? "var(--taupe-2)" : "var(--ink)",
+          opacity: comingSoon ? 0.4 : 1,
           marginTop: 6,
           flexShrink: 0,
         }}

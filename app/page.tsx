@@ -30,14 +30,14 @@ export default async function HomePage() {
       {/* Top bar — no fixed height, asymmetric padding, Wordmark + StreakChip */}
       <div
         className="flex items-center justify-between border-b"
-        style={{ padding: "14px 16px 10px", background: "var(--paper)", borderColor: "var(--hair)" }}
+        style={{ padding: "14px 16px 10px", background: "var(--paper)", borderColor: "var(--hair-2)" }}
       >
-        <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-          <span className="serif" style={{ fontSize: 15, fontWeight: 600, letterSpacing: "-0.02em", color: "var(--ink)" }}>
-            Sonic Acrylic
+        <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          <span className="mono" style={{ fontSize: 15, fontWeight: 700, letterSpacing: "0.02em", color: "var(--ink)", textTransform: "uppercase" }}>
+            SONIC ACRYLIC
           </span>
-          <span className="mono uppercase" style={{ fontSize: 8, color: "var(--taupe)", letterSpacing: "0.2em" }}>
-            Games
+          <span className="mono" style={{ fontSize: 8, color: "var(--taupe-2)", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+            GAMES
           </span>
         </div>
         <StreakChip />
@@ -48,8 +48,8 @@ export default async function HomePage() {
         {row ? (
           <Hero headline="Today's Artists" lineup={row.lineup_artists} />
         ) : (
-          <div className="serif italic" style={{ padding: "18px 18px 16px", color: "var(--taupe)" }}>
-            New edition drops at midnight ET. Come back then.
+          <div className="mono" style={{ padding: "18px 18px 16px", color: "var(--taupe)", textTransform: "uppercase", fontSize: 11 }}>
+            NEW EDITION DROPS AT MIDNIGHT ET. COME BACK THEN.
           </div>
         )}
 

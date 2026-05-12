@@ -27,12 +27,14 @@ export function ActionRow({ onShuffle, onClear, onSubmit, submitDisabled }: Prop
       <button
         onClick={onSubmit}
         disabled={submitDisabled}
-        className={`btn sm${submitDisabled ? " ghost" : " cta-plasma glow-rust"}`}
+        className="btn sm"
         style={{
           flex: 1.4,
-          border: submitDisabled ? "1.5px solid var(--hair-2)" : "1.5px solid transparent",
+          background: submitDisabled ? "transparent" : "var(--rust)",
+          color: submitDisabled ? "var(--taupe)" : "var(--paper)",
+          border: submitDisabled ? "1.5px solid var(--hair-2)" : "1.5px solid var(--rust)",
           opacity: submitDisabled ? 0.6 : 1,
-          ...(submitDisabled ? { color: "var(--taupe)", background: "transparent" } : {}),
+          borderRadius: 0,
         }}
       >
         SUBMIT

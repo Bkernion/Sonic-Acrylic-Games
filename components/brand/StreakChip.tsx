@@ -10,18 +10,14 @@ export function StreakChip() {
       .then((d) => setCount(d.current ?? 0))
       .catch(() => setCount(0));
   }, []);
-  const lit = (count ?? 0) > 0;
   return (
     <span
-      className={`pill compact${lit ? " cta-plasma glow-rust" : ""}`}
-      style={{
-        border: lit ? "1px solid transparent" : undefined,
-        ...(lit ? { color: "#FFF1DE" } : {}),
-      }}
+      className="pill compact"
+      style={{ borderRadius: 0, border: "1px solid var(--hair-2)", background: "transparent", color: "var(--ink)" }}
       aria-label={`Current streak ${count ?? 0} days`}
     >
-      <span style={{ color: lit ? "#FFF1DE" : "var(--rust)" }}>◆</span>
-      <span>{count ?? "–"}</span>
+      <span style={{ color: "var(--ink)" }}>◆</span>
+      <span className="mono" style={{ fontSize: 11, color: "var(--ink)", textTransform: "uppercase" }}>{count ?? "–"}</span>
     </span>
   );
 }
