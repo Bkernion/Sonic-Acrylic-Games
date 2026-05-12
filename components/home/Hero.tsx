@@ -5,23 +5,37 @@ type Props = {
 
 export function Hero({ headline, lineup }: Props) {
   return (
-    <section
-      className="mx-4 mt-4 p-[18px] rounded-[6px] border surface-warm grain"
-      style={{ borderColor: "var(--hair-2)" }}
-    >
-      <h1 className="serif font-semibold text-[32px] leading-[1.1]" style={{ color: "var(--ink)" }}>
+    <section className="surface-warm" style={{ padding: "18px 18px 16px" }}>
+      <h1 className="serif font-semibold" style={{ fontSize: 32, lineHeight: 1.02, color: "var(--ink)" }}>
         {headline}
       </h1>
-      <ol className="mt-4 space-y-2">
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 2 }}>
         {lineup.map((name, i) => (
-          <li key={name} className="flex items-baseline gap-3">
-            <span className="mono text-[12px]" style={{ color: "var(--rust)" }}>{(i+1).toString().padStart(2, "0")}</span>
-            <span className="serif text-[20px]" style={{ color: "var(--ink)" }}>{name}</span>
-          </li>
+          <div key={name} style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+            <span
+              className="mono"
+              style={{ fontSize: 9.5, color: "var(--rust)", letterSpacing: "0.18em", textTransform: "uppercase", width: 18, flexShrink: 0 }}
+            >
+              {(i + 1).toString().padStart(2, "0")}
+            </span>
+            <span className="serif" style={{ fontSize: 20, fontWeight: 500, letterSpacing: "-0.01em", color: "var(--ink)" }}>
+              {name}
+            </span>
+          </div>
         ))}
-      </ol>
-      <hr className="hr mt-4" />
-      <p className="serif italic text-[14px] mt-3" style={{ color: "var(--taupe)", fontWeight: 400 }}>
+      </div>
+      <p
+        className="serif italic"
+        style={{
+          fontSize: 14,
+          lineHeight: 1.4,
+          color: "var(--taupe)",
+          fontWeight: 400,
+          marginTop: 10,
+          paddingTop: 10,
+          borderTop: "1px solid var(--hair-2)",
+        }}
+      >
         These are the artists today&apos;s games will be based on.
       </p>
     </section>

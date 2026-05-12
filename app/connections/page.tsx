@@ -29,6 +29,12 @@ function colorForDifficulty(d: 1 | 2 | 3 | 4): { bg: string; fg: string } {
   }
 }
 
+const APPBAR_WORDMARK = (
+  <span className="mono uppercase" style={{ fontSize: 10.5, letterSpacing: "0.22em" }}>
+    CONNECTIONS · 1 OF 6
+  </span>
+);
+
 export default function ConnectionsPage() {
   const [puzzle, setPuzzle] = useState<PuzzleResp | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -125,11 +131,7 @@ export default function ConnectionsPage() {
   if (error === "no_puzzle") {
     return (
       <>
-        <AppBar
-          wordmark={<span className="mono uppercase text-[10.5px] tracking-[0.22em]">CONNECTIONS · 1 OF 6</span>}
-          backHref="/"
-          rightSlot={<StreakChip />}
-        />
+        <AppBar wordmark={APPBAR_WORDMARK} backHref="/" rightSlot={<StreakChip />} />
         <div className="mx-4 mt-8 serif italic" style={{ color: "var(--taupe)" }}>
           No puzzle for today yet — check back at midnight ET.
         </div>
@@ -140,56 +142,69 @@ export default function ConnectionsPage() {
   if (!puzzle || !state) {
     return (
       <>
-        <AppBar
-          wordmark={<span className="mono uppercase text-[10.5px] tracking-[0.22em]">CONNECTIONS · 1 OF 6</span>}
-          backHref="/"
-          rightSlot={<StreakChip />}
-        />
-        <div className="mx-4 mt-8 mono text-[11px]" style={{ color: "var(--taupe)" }}>LOADING…</div>
+        <AppBar wordmark={APPBAR_WORDMARK} backHref="/" rightSlot={<StreakChip />} />
+        <div className="mx-4 mt-8 mono" style={{ fontSize: 11, color: "var(--taupe)" }}>LOADING…</div>
       </>
     );
   }
 
   return (
     <>
-      <AppBar
-        wordmark={<span className="mono uppercase text-[10.5px] tracking-[0.22em]">CONNECTIONS · 1 OF 6</span>}
-        backHref="/"
-        rightSlot={<StreakChip />}
-      />
-      <div className="flex-1 overflow-y-auto pb-2">
-        <div className="mx-4 mt-4">
-          <p className="serif text-[21px] font-medium" style={{ color: "var(--ink)" }}>
-            Sixteen songs. <span className="block">Four hidden categories.</span>
-          </p>
-          {puzzle.theme_pull_quote ? (
-            <p className="serif italic text-[14px] mt-2" style={{ color: "var(--taupe)" }}>{puzzle.theme_pull_quote}</p>
-          ) : null}
-        </div>
-        <Mistakes left={state.mistakesLeft} />
-        <Grid tiles={state.tiles} selected={state.selected} disabled={state.status !== "playing"} onToggle={(t) => setState((s) => s ? toggleTile(s, t) : s)} />
+      <AppBar wordmark={APPBAR_WORDMARK} backHref="/" rightSlot={<StreakChip />} />
 
+      <div className="flex-1 overflow-y-auto pb-2">
+        {/* Prompt + subtitle */}
+        <div style={{ padding: 14 }}>
+          <p className="serif" style={{ fontSize: 21, lineHeight: 1.15, fontWeight: 500, color: "var(--ink)" }}>
+            Sixteen songs.<br />Four hidden categories.
+          </p>
+          <p className="serif italic" style={{ fontSize: 14, lineHeight: 1.35, color: "var(--taupe)", marginTop: 4 }}>
+            {puzzle.theme_pull_quote ?? "Sort them into four hidden groups."}
+          </p>
+        </div>
+
+        {/* Mistakes row */}
+        <Mistakes left={state.mistakesLeft} />
+
+        {/* Tile grid */}
+        <Grid
+          tiles={state.tiles}
+          selected={state.selected}
+          disabled={state.status !== "playing"}
+          onToggle={(t) => setState((s) => s ? toggleTile(s, t) : s)}
+        />
+
+        {/* Marginalia note */}
         {puzzle.marginalia_quote ? (
           <div
-            className="mx-4 mt-4 px-3 py-2 serif italic text-[14px]"
-            style={{ borderLeft: "2px solid var(--rust)", background: "var(--paper-2)", color: "var(--taupe)" }}
-          >{puzzle.marginalia_quote}</div>
+            className="surface-warm mx-4 mt-4"
+            style={{ borderLeft: "2px solid var(--rust)", padding: "10px 12px" }}
+          >
+            <div className="mono" style={{ fontSize: 9.5, color: "var(--rust)", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+              MARGINALIA · 14
+            </div>
+            <div className="serif italic" style={{ fontSize: 14, lineHeight: 1.35, color: "var(--ink)", marginTop: 3 }}>
+              &ldquo;{puzzle.marginalia_quote}&rdquo;
+            </div>
+          </div>
         ) : null}
 
+        {/* Solved rows */}
         {state.solved.length > 0 ? (
           <div className="mx-4 mt-3 flex flex-col gap-2">
             {state.solved.map((c) => {
               const { bg, fg } = colorForDifficulty(c.difficulty);
               return (
                 <div key={c.name} className="px-3 py-2 rounded-[6px]" style={{ background: bg, color: fg }}>
-                  <div className="mono uppercase text-[10px] tracking-[0.18em] opacity-90">{c.name}</div>
-                  <div className="serif text-[15px] mt-[2px]">{c.members.join(" · ")}</div>
+                  <div className="mono uppercase" style={{ fontSize: 10, letterSpacing: "0.18em", opacity: 0.9 }}>{c.name}</div>
+                  <div className="serif" style={{ fontSize: 15, marginTop: 2 }}>{c.members.join(" · ")}</div>
                 </div>
               );
             })}
           </div>
         ) : null}
 
+        {/* Action row */}
         <ActionRow
           onShuffle={() => setState((s) => s ? { ...s, tiles: seededShuffle(s.tiles, `${puzzle.date}:${Date.now()}`) } : s)}
           onClear={() => setState((s) => s ? clearSelection(s) : s)}
@@ -198,18 +213,20 @@ export default function ConnectionsPage() {
         />
 
         {toast ? (
-          <div className="mx-4 mt-3 mono uppercase text-[10px] tracking-[0.22em] text-center" style={{ color: "var(--taupe)" }}>
+          <div className="mx-4 mt-3 mono uppercase text-center" style={{ fontSize: 10, letterSpacing: "0.22em", color: "var(--taupe)" }}>
             {toast}
           </div>
         ) : null}
 
-        <div className="h-6" />
+        <div style={{ height: 24 }} />
       </div>
 
-      <div className="px-4 py-2 flex justify-center" style={{ borderTop: "1px solid var(--hair)" }}>
+      {/* MiniPill ribbon */}
+      <div className="flex justify-center px-4 py-2" style={{ borderTop: "1px solid var(--hair)" }}>
         <MiniPill />
       </div>
 
+      {/* Win/Loss modal */}
       {modalOpen && state ? (
         <WinModal
           stats={{

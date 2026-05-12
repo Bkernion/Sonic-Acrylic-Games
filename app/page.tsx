@@ -1,4 +1,3 @@
-import { AppBar } from "@/components/brand/AppBar";
 import { StreakChip } from "@/components/brand/StreakChip";
 import { Hero } from "@/components/home/Hero";
 import { GameCard } from "@/components/home/GameCard";
@@ -8,13 +7,6 @@ import { etToday } from "@/lib/date";
 import { sql } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
-
-function fmtEdition(date: string, no: number): string {
-  const d = new Date(date + "T12:00:00Z");
-  const wk = ["SUN","MON","TUE","WED","THU","FRI","SAT"][d.getUTCDay()];
-  const mo = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][d.getUTCMonth()];
-  return `${wk} · ${mo} ${d.getUTCDate()} · ED.${String(no).padStart(3, "0")}`;
-}
 
 const GAMES = [
   { i: 1, kicker: "CONNECT", title: "Sixteen songs from tonight's five", subtitle: "Sort them into four hidden groups.", href: "/connections" },
@@ -35,41 +27,56 @@ export default async function HomePage() {
 
   return (
     <>
-      <AppBar
-        wordmark={
-          <>
-            <span className="serif text-[14px] font-semibold" style={{ color: "var(--ink)" }}>Sonic Acrylic</span>{" "}
-            <span className="mono uppercase text-[10px] tracking-[0.18em]" style={{ color: "var(--taupe)" }}>Games</span>
-          </>
-        }
-        rightSlot={<StreakChip />}
-      />
-      <div className="flex-1 overflow-y-auto pb-2">
+      {/* Top bar — no fixed height, asymmetric padding, Wordmark + StreakChip */}
+      <div
+        className="flex items-center justify-between border-b"
+        style={{ padding: "14px 16px 10px", background: "var(--paper)", borderColor: "var(--hair)" }}
+      >
+        <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+          <span className="serif" style={{ fontSize: 15, fontWeight: 600, letterSpacing: "-0.02em", color: "var(--ink)" }}>
+            Sonic Acrylic
+          </span>
+          <span className="mono uppercase" style={{ fontSize: 8, color: "var(--taupe)", letterSpacing: "0.2em" }}>
+            Games
+          </span>
+        </div>
+        <StreakChip />
+      </div>
+
+      <div className="flex-1 overflow-y-auto">
+        {/* Hero section — surface-warm, no border/radius */}
         {row ? (
-          <Hero
-            headline={"Today's Artists"}
-            lineup={row.lineup_artists}
-          />
+          <Hero headline="Today's Artists" lineup={row.lineup_artists} />
         ) : (
-          <div className="mx-4 mt-4 p-4 serif italic" style={{ color: "var(--taupe)" }}>
+          <div className="serif italic" style={{ padding: "18px 18px 16px", color: "var(--taupe)" }}>
             New edition drops at midnight ET. Come back then.
           </div>
         )}
 
-        <div className="mx-4 mt-5 mono uppercase text-[10px] tracking-[0.18em] flex items-center gap-2" style={{ color: "var(--taupe)" }}>
-          <span className="flex-1 h-px" style={{ background: "var(--hair)" }} />
-          <span>TODAY&apos;S SIX</span>
-          <span className="flex-1 h-px" style={{ background: "var(--hair)" }} />
-        </div>
-        <div className="mx-4 mt-3 flex flex-col gap-[14px]">
-          {GAMES.map((g) => (
-            <GameCard key={g.i} index={g.i} kicker={g.kicker} title={g.title} subtitle={g.subtitle} href={g.href} comingSoon={g.comingSoon} />
+        {/* "Today's six" rule — left-aligned, no flanking hairlines */}
+        <div className="rule one" style={{ padding: "14px 18px 6px" }}>Today&apos;s six</div>
+
+        {/* Games — hairline-separated rows, no card backgrounds */}
+        <div>
+          {GAMES.map((g, idx) => (
+            <GameCard
+              key={g.i}
+              index={g.i}
+              kicker={g.kicker}
+              title={g.title}
+              subtitle={g.subtitle}
+              href={g.href}
+              comingSoon={g.comingSoon}
+              isLast={idx === GAMES.length - 1}
+            />
           ))}
         </div>
 
+        {/* Side B */}
         <SideB />
-        <div className="h-4" />
+        <div style={{ height: 16 }} />
       </div>
+
       <FullRibbon />
     </>
   );

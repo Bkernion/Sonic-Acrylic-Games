@@ -1,23 +1,25 @@
 export function SideB() {
   return (
-    <section className="mx-4 mt-6">
-      <div className="mono uppercase text-[10px] tracking-[0.18em] flex items-center gap-2" style={{ color: "var(--taupe)" }}>
-        <span className="flex-1 h-px" style={{ background: "var(--hair)" }} />
-        <span>SIDE B</span>
-        <span className="flex-1 h-px" style={{ background: "var(--hair)" }} />
-      </div>
-      <div className="grid grid-cols-2 gap-3 mt-3">
-        <div className="p-3 rounded-[6px] border surface-warm" style={{ borderColor: "var(--hair-2)" }}>
-          <div className="mono uppercase text-[9px] tracking-[0.18em]" style={{ color: "var(--taupe)" }}>RANK</div>
-          <div className="serif text-[16px] mt-1" style={{ color: "var(--ink)" }}>—</div>
-          <div className="serif italic text-[11px]" style={{ color: "var(--taupe)", fontWeight: 400 }}>coming with leaderboards</div>
+    <div style={{ padding: "14px 18px 8px" }}>
+      <div className="rule one" style={{ color: "var(--taupe)" }}>Side B</div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 8 }}>
+        <div className="surface-warm" style={{ padding: 10, borderRadius: 6 }}>
+          <div className="mono" style={{ fontSize: 9, letterSpacing: "0.2em", color: "var(--taupe)", textTransform: "uppercase" }}>
+            LEADERBOARD
+          </div>
+          <div className="serif" style={{ fontSize: 15, fontWeight: 500, marginTop: 2, color: "var(--ink)" }}>
+            —
+          </div>
         </div>
-        <div className="p-3 rounded-[6px] border surface-warm" style={{ borderColor: "var(--hair-2)" }}>
-          <div className="mono uppercase text-[9px] tracking-[0.18em]" style={{ color: "var(--taupe)" }}>TIP JAR</div>
-          <div className="serif text-[16px] mt-1" style={{ color: "var(--ink)" }}>—</div>
-          <div className="serif italic text-[11px]" style={{ color: "var(--taupe)", fontWeight: 400 }}>opens later this season</div>
+        <div className="surface-warm" style={{ padding: 10, borderRadius: 6 }}>
+          <div className="mono" style={{ fontSize: 9, letterSpacing: "0.2em", color: "var(--taupe)", textTransform: "uppercase" }}>
+            TIP JAR
+          </div>
+          <div className="serif italic" style={{ fontSize: 13, marginTop: 2, color: "var(--ink)" }}>
+            buy the curator a coffee
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

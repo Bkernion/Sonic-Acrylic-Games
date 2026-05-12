@@ -7,29 +7,57 @@ type Props = {
   subtitle: string;
   href?: string;
   comingSoon?: string;
+  isLast?: boolean;
 };
 
-export function GameCard({ index, kicker, title, subtitle, href, comingSoon }: Props) {
+export function GameCard({ index, kicker, title, subtitle, href, comingSoon, isLast }: Props) {
   const inner = (
     <div
-      className={`flex items-center gap-3 px-4 py-[14px] rounded-[6px] border ${comingSoon ? "" : "surface-warm"}`}
       style={{
-        borderColor: "var(--hair-2)",
-        opacity: comingSoon ? 0.5 : 1,
+        display: "flex",
+        alignItems: "flex-start",
+        gap: 12,
+        padding: "14px 18px",
+        borderBottom: isLast ? undefined : "1px solid var(--hair)",
+        opacity: comingSoon ? 0.6 : 1,
       }}
     >
-      <div className="mono text-[22px]" style={{ color: "var(--ink)" }}>
+      <div
+        className="mono"
+        style={{ fontSize: 11, color: "var(--taupe)", marginTop: 4, width: 22, flexShrink: 0 }}
+      >
         {index.toString().padStart(2, "0")}
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="mono uppercase text-[10px] tracking-[0.22em]" style={{ color: "var(--rust)" }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div
+          className="mono uppercase"
+          style={{ fontSize: 10, letterSpacing: "0.22em", color: "var(--rust)" }}
+        >
           {kicker}
         </div>
-        <div className="serif text-[19px] mt-[2px]" style={{ color: "var(--ink)" }}>{title}</div>
-        <div className="serif italic text-[13.5px] mt-[2px]" style={{ color: "var(--taupe)", fontWeight: 400 }}>{subtitle}</div>
+        <div
+          className="serif"
+          style={{ fontSize: 19, lineHeight: 1.15, marginTop: 2, fontWeight: 500, color: "var(--ink)" }}
+        >
+          {title}
+        </div>
+        <div
+          className="serif italic"
+          style={{ fontSize: 13.5, lineHeight: 1.35, color: "var(--taupe)", marginTop: 3, fontWeight: 400 }}
+        >
+          {subtitle}
+        </div>
       </div>
-      <div className="mono text-[10px]" style={{ color: comingSoon ? "var(--taupe)" : "var(--ink)" }}>
-        {comingSoon ? comingSoon : "→"}
+      <div
+        style={{
+          fontSize: 14,
+          color: comingSoon ? "var(--taupe)" : "var(--ink)",
+          opacity: comingSoon ? 0.5 : 1,
+          marginTop: 6,
+          flexShrink: 0,
+        }}
+      >
+        →
       </div>
     </div>
   );

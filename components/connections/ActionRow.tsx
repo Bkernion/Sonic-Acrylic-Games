@@ -8,32 +8,35 @@ type Props = {
 };
 
 export function ActionRow({ onShuffle, onClear, onSubmit, submitDisabled }: Props) {
-  const btnBase: React.CSSProperties = {
-    height: 44, borderRadius: 999, padding: "0 18px",
-    fontFamily: "var(--mono)", fontSize: 11, fontWeight: 500,
-    letterSpacing: "0.14em", textTransform: "uppercase",
-  };
   return (
     <div className="mx-4 mt-5 flex gap-2">
       <button
         onClick={onShuffle}
-        style={{ ...btnBase, border: "1.5px solid var(--hair-2)", color: "var(--taupe)", background: "transparent" }}
-      >Shuffle</button>
+        className="btn ghost sm"
+        style={{ flex: 1 }}
+      >
+        SHUFFLE
+      </button>
       <button
         onClick={onClear}
-        style={{ ...btnBase, border: "1.5px solid var(--hair-2)", color: "var(--taupe)", background: "transparent" }}
-      >Clear</button>
+        className="btn ghost sm"
+        style={{ flex: 1 }}
+      >
+        CLEAR
+      </button>
       <button
         onClick={onSubmit}
         disabled={submitDisabled}
-        className={submitDisabled ? "" : "cta-plasma glow-rust"}
+        className={`btn sm${submitDisabled ? " ghost" : " cta-plasma glow-rust"}`}
         style={{
-          ...btnBase, flex: 1.4,
-          border: submitDisabled ? "1.5px solid var(--rust)" : "1.5px solid transparent",
-          ...(submitDisabled ? { background: "transparent", color: "var(--rust)" } : {}),
+          flex: 1.4,
+          border: submitDisabled ? "1.5px solid var(--hair-2)" : "1.5px solid transparent",
           opacity: submitDisabled ? 0.6 : 1,
+          ...(submitDisabled ? { color: "var(--taupe)", background: "transparent" } : {}),
         }}
-      >Submit</button>
+      >
+        SUBMIT
+      </button>
     </div>
   );
 }

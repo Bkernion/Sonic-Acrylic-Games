@@ -9,24 +9,33 @@ function PlayPause() {
     <button
       onClick={np.toggle}
       aria-label={np.isPlaying ? "Pause" : "Play"}
-      className="inline-flex items-center justify-center rounded-full"
-      style={{ width: 30, height: 30, background: "var(--ink)", color: "var(--paper)" }}
+      className="inline-flex items-center justify-center rounded-full flex-shrink-0"
+      style={{ width: 30, height: 30, background: "var(--ink)", color: "var(--paper)", fontSize: 11 }}
     >
       <span aria-hidden>{np.isPlaying ? "❚❚" : "▶"}</span>
     </button>
   );
 }
 
+/* Variable-height bars matching prototype: [6, 11, 5, 9, 7] px */
 function Equalizer({ playing }: { playing: boolean }) {
+  const heights = [6, 11, 5, 9, 7];
   return (
-    <div className={`flex items-end gap-[2px] h-[16px] ${playing ? "" : "eq-paused"}`}>
-      {[1.2, 1.3, 1.4, 1.5, 1.6].map((d, i) => (
+    <div
+      className={`flex items-end flex-shrink-0 ${playing ? "" : "eq-paused"}`}
+      style={{ gap: 2, height: 12 }}
+    >
+      {heights.map((h, i) => (
         <span
           key={i}
           className="eq-bar"
           style={{
-            ["--eq-duration" as never]: `${d}s`,
-            width: 3, height: "100%", background: "var(--rust)", borderRadius: 1,
+            ["--eq-duration" as never]: `${1.2 + i * 0.1}s`,
+            width: 2,
+            height: h,
+            background: "var(--rust)",
+            borderRadius: 1,
+            transformOrigin: "bottom",
           } as React.CSSProperties}
         />
       ))}
@@ -45,21 +54,21 @@ export function FullRibbon() {
   if (!np.current) return null;
   return (
     <div
-      className="flex items-center gap-3 px-4 border-t surface-warm"
-      style={{ height: 60, borderColor: "var(--hair)" }}
+      className="flex items-center surface-warm border-t"
+      style={{ gap: 10, padding: "10px 14px", borderColor: "var(--hair)" }}
     >
       <PlayPause />
       <Equalizer playing={np.isPlaying} />
       <div className="flex-1 min-w-0">
-        <div className="serif italic text-[14px] truncate" style={{ color: "var(--ink)" }}>
-          {np.current.title}
+        <div className="serif italic truncate" style={{ fontSize: 14, lineHeight: 1.1, color: "var(--ink)" }}>
+          &ldquo;{np.current.title}&rdquo;
         </div>
-        <div className="mono uppercase text-[9px] tracking-[0.18em] truncate" style={{ color: "var(--taupe)" }}>
-          {np.current.artist}
+        <div className="mono uppercase truncate" style={{ fontSize: 9.5, color: "var(--taupe)", letterSpacing: "0.18em", marginTop: 2 }}>
+          {np.current.artist.toUpperCase()}
         </div>
       </div>
       <PlatformIcons links={np.current.streaming_links} source="full" />
-      <div className="mono text-[10px]" style={{ color: "var(--taupe)" }}>
+      <div className="mono" style={{ fontSize: 9.5, color: "var(--taupe)", letterSpacing: "0.18em", flexShrink: 0 }}>
         {fmt(np.positionSec)}
       </div>
     </div>
