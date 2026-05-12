@@ -1,26 +1,47 @@
 @import "tailwindcss";
 
+/* ───────────── Cobalt Psychedelic — production palette ───────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #FFF1DE;
+  --paper-2: #FCD8B5;
+  --paper-3: #F7B98A;
+  --ink: #1F5FA8;
+  --ink-2: #3478C8;
+  --rust: #E63ABD;
+  --rust-2: #C8228F;
+  --rust-3: #FF8FE0;
+  --taupe: #4A8BD9;
+  --taupe-2: #6FA7E5;
+  --hair: #C9DCEE;
+  --hair-2: #A1C0DC;
+
+  --serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --sans: var(--font-plex-sans), system-ui, sans-serif;
+  --mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html, body { background: #1A1A1A; }
+
+/* Cobalt radial blooms — applied to the .stage wrapper that hosts the 440px column */
+.stage {
+  background:
+    radial-gradient(60% 50% at -10% -10%, rgba(255, 138, 31, 0.32) 0%, transparent 55%),
+    radial-gradient(60% 60% at 110% -10%, rgba(255, 60, 200, 0.25) 0%, transparent 55%),
+    radial-gradient(70% 50% at 50% 110%, rgba(78, 217, 229, 0.30) 0%, transparent 55%),
+    var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.005em;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+.serif { font-family: var(--serif); letter-spacing: -0.015em; }
+.mono  { font-family: var(--mono); letter-spacing: 0.04em; }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+/* Hairlines */
+.hr { height: 1px; background: var(--hair); border: 0; }
+
+/* Equalizer animation for NowPlaying */
+@keyframes eq-bar { 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
+.eq-bar { transform-origin: bottom; animation: eq-bar var(--eq-duration, 1.4s) ease-in-out infinite; }
+.eq-paused .eq-bar { animation-play-state: paused; transform: scaleY(0.5); }
