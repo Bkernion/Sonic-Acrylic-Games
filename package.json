@@ -12,7 +12,8 @@
     "test:e2e": "playwright test",
     "db:migrate": "tsx scripts/migrate.ts",
     "seed:day": "tsx --env-file=.env.local scripts/seed-day.ts",
-    "seed:all": "tsx --env-file=.env.local scripts/seed-day.ts --all"
+    "seed:all": "tsx --env-file=.env.local scripts/seed-day.ts --all",
+    "catalog": "tsx --env-file=.env.local scripts/fetch-catalog.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
