@@ -8,6 +8,7 @@ import { Mistakes } from "@/components/connections/Mistakes";
 import { ActionRow } from "@/components/connections/ActionRow";
 import { WinModal } from "@/components/connections/WinModal";
 import { MiniPill } from "@/components/brand/NowPlaying/MiniPill";
+import { useNowPlaying } from "@/components/brand/NowPlaying/Provider";
 import { initState, toggleTile, clearSelection, revealAll, type ConnectionsState, type Category } from "@/lib/connections";
 import { seededShuffle } from "@/lib/shuffle";
 
@@ -44,6 +45,17 @@ export default function ConnectionsPage() {
   const [streak, setStreak] = useState<{ current: number; longest: number }>({ current: 0, longest: 0 });
   const startRef = useRef<number>(Date.now());
   const mistakesUsedRef = useRef(0);
+  const np = useNowPlaying();
+
+  // Try to start the music when the player enters the game page. Browsers will
+  // reject this if there hasn't been a prior user gesture in this origin; in
+  // that case the ribbon's play button still works as the manual fallback.
+  useEffect(() => {
+    if (!np.isPlaying) {
+      np.play().catch(() => {});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetch("/api/puzzle/today", { cache: "no-store" })

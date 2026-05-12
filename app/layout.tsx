@@ -22,8 +22,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${serifDisplay.variable} ${plexSans.variable} ${plexMono.variable}`}>
       <body>
         <NowPlayingProvider tracks={TRACKS}>
-          <div className="min-h-dvh flex justify-center">
-            <main className="stage w-full max-w-[440px] min-h-dvh relative overflow-hidden flex flex-col">
+          <div className="h-dvh flex justify-center">
+            <main className="stage w-full max-w-[440px] h-dvh relative overflow-hidden flex flex-col">
               {children}
             </main>
           </div>
