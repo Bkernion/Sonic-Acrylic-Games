@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { newsreader, plexSans, plexMono } from "./fonts";
+import { serifDisplay, plexSans, plexMono } from "./fonts";
 import { NowPlayingProvider } from "@/components/brand/NowPlaying/Provider";
 import { TRACKS } from "@/lib/tracks";
 
@@ -19,7 +19,7 @@ export const viewport = { width: "device-width", initialScale: 1, themeColor: "#
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${newsreader.variable} ${plexSans.variable} ${plexMono.variable}`}>
+    <html lang="en" className={`${serifDisplay.variable} ${plexSans.variable} ${plexMono.variable}`}>
       <body>
         <NowPlayingProvider tracks={TRACKS}>
           <div className="min-h-dvh flex justify-center">

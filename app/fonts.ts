@@ -1,10 +1,10 @@
-import { Newsreader, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { EB_Garamond, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 
-export const newsreader = Newsreader({
+export const serifDisplay = EB_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
-  variable: "--font-newsreader",
+  variable: "--font-serif-display",
   display: "swap",
 });
 

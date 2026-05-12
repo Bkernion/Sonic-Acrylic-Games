@@ -20,7 +20,7 @@
   --hair: #C9DCEE;
   --hair-2: #A1C0DC;
 
-  --serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --serif: var(--font-serif-display), Georgia, "Times New Roman", serif;
   --sans: var(--font-plex-sans), system-ui, sans-serif;
   --mono: var(--font-plex-mono), ui-monospace, monospace;
 
@@ -63,8 +63,8 @@ html, body { background: #1A1A1A; }
   100% { background-position: 0px 0px, 0px 0px; }
 }
 
-/* Type defaults: tighten + weight under stage */
-.stage .serif { font-family: var(--serif); letter-spacing: -0.028em; font-weight: 600; }
+/* Type defaults: EB Garamond is narrower than Newsreader — relax tracking a bit. */
+.stage .serif { font-family: var(--serif); letter-spacing: -0.01em; font-weight: 500; }
 .stage .mono  { font-family: var(--mono); letter-spacing: 0.04em; }
 
 /* Hairlines */
