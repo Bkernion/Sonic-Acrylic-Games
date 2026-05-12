@@ -174,21 +174,6 @@ export default function ConnectionsPage() {
           onToggle={(t) => setState((s) => s ? toggleTile(s, t) : s)}
         />
 
-        {/* Marginalia note */}
-        {puzzle.marginalia_quote ? (
-          <div
-            className="mx-4 mt-4"
-            style={{ borderLeft: "2px solid var(--ink)", padding: "10px 12px", background: "var(--paper-2)" }}
-          >
-            <div className="mono" style={{ fontSize: 9.5, color: "var(--ink)", letterSpacing: "0.2em", textTransform: "uppercase" }}>
-              MARGINALIA · 14
-            </div>
-            <div className="mono" style={{ fontSize: 12, lineHeight: 1.35, color: "var(--rust)", marginTop: 3, textTransform: "uppercase", fontStyle: "normal", letterSpacing: "0.04em" }}>
-              {puzzle.marginalia_quote}
-            </div>
-          </div>
-        ) : null}
-
         {/* Solved rows */}
         {state.solved.length > 0 ? (
           <div className="mx-4 mt-3 flex flex-col gap-2">
