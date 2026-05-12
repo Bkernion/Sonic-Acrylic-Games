@@ -127,6 +127,18 @@ html, body { background: #1A1A1A; }
   border-radius: inherit;
 }
 
+/* Modal entrance: backdrop fades up, box slides + scales in */
+@keyframes modal-backdrop-in {
+  from { background-color: rgba(0, 0, 0, 0); }
+  to   { background-color: rgba(0, 0, 0, 0.45); }
+}
+@keyframes modal-box-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-backdrop-in { animation: modal-backdrop-in 0.35s ease-out forwards; }
+.modal-box-in      { animation: modal-box-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+
 /* Connections tile typography breathing */
 .tile-cell {
   overflow-wrap: anywhere;

@@ -63,16 +63,29 @@ export function WinModal({ stats, editionId, onClose }: { stats: Stats; editionI
     <div
       role="dialog"
       aria-modal="true"
-      className="absolute inset-0 flex items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,0.45)" }}
+      className="absolute inset-0 flex items-center justify-center p-4 modal-backdrop-in"
       onClick={onClose}
     >
       <div
-        className="w-full rounded-[6px] p-5 surface-warm grain"
+        className="w-full rounded-[6px] p-5 surface-warm grain relative modal-box-in"
         style={{ color: "var(--ink)", maxWidth: 380 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mono uppercase text-[10px] tracking-[0.22em]" style={{ color: "var(--rust)" }}>
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-2 right-2 inline-flex items-center justify-center rounded-full"
+          style={{
+            width: 30, height: 30,
+            color: "var(--ink)",
+            background: "rgba(255,255,255,0.4)",
+            border: "1px solid var(--hair-2)",
+            fontSize: 14, lineHeight: 1,
+          }}
+        >
+          <span aria-hidden>✕</span>
+        </button>
+        <div className="mono uppercase text-[10px] tracking-[0.22em] pr-10" style={{ color: "var(--rust)" }}>
           {stats.outcome === "won" ? "SOLVED" : "TOMORROW"} · {mm}:{ss}
         </div>
         <h2 className="serif font-semibold text-[32px] leading-[1.1] mt-2">
