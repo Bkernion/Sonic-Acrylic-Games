@@ -1,20 +1,15 @@
 type Props = {
-  editionLabel: string;
   headline: string;
   lineup: string[];
-  themeQuote?: string | null;
 };
 
-export function Hero({ editionLabel, headline, lineup, themeQuote }: Props) {
+export function Hero({ headline, lineup }: Props) {
   return (
     <section
       className="mx-4 mt-4 p-[18px] rounded-[6px] border surface-warm grain"
       style={{ borderColor: "var(--hair-2)" }}
     >
-      <div className="mono uppercase text-[10.5px] tracking-[0.22em]" style={{ color: "var(--taupe)" }}>
-        {editionLabel}
-      </div>
-      <h1 className="serif font-semibold text-[32px] mt-3 leading-[1.1]" style={{ color: "var(--ink)" }}>
+      <h1 className="serif font-semibold text-[32px] leading-[1.1]" style={{ color: "var(--ink)" }}>
         {headline}
       </h1>
       <ol className="mt-4 space-y-2">
@@ -25,12 +20,10 @@ export function Hero({ editionLabel, headline, lineup, themeQuote }: Props) {
           </li>
         ))}
       </ol>
-      {themeQuote ? (
-        <>
-          <hr className="hr mt-4" />
-          <p className="serif italic text-[14px] mt-3" style={{ color: "var(--taupe)", fontWeight: 400 }}>{themeQuote}</p>
-        </>
-      ) : null}
+      <hr className="hr mt-4" />
+      <p className="serif italic text-[14px] mt-3" style={{ color: "var(--taupe)", fontWeight: 400 }}>
+        These are the artists today&apos;s games will be based on.
+      </p>
     </section>
   );
 }

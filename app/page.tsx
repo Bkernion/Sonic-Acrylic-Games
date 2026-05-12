@@ -47,10 +47,8 @@ export default async function HomePage() {
       <div className="flex-1 overflow-y-auto pb-2">
         {row ? (
           <Hero
-            editionLabel={fmtEdition(String(row.date).slice(0, 10), row.edition_no)}
             headline={"Today's Artists"}
             lineup={row.lineup_artists}
-            themeQuote={row.theme_pull_quote}
           />
         ) : (
           <div className="mx-4 mt-4 p-4 serif italic" style={{ color: "var(--taupe)" }}>
