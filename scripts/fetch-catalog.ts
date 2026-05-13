@@ -79,13 +79,27 @@ async function getToken(): Promise<string> {
   return (await r.json()).access_token;
 }
 
-async function spotifyGet<T>(token: string, url: string, attempt = 1): Promise<T> {
+const REQUEST_SPACING_MS = 200;     // pre-emptive pacing — cheaper than retries
+const MAX_RETRY_WAIT_MS = 10_000;   // cap Spotify's Retry-After hint
+const MAX_RETRIES = 2;
+
+let lastRequestAt = 0;
+async function pace() {
+  const since = Date.now() - lastRequestAt;
+  if (since < REQUEST_SPACING_MS) {
+    await new Promise((res) => setTimeout(res, REQUEST_SPACING_MS - since));
+  }
+  lastRequestAt = Date.now();
+}
+
+async function spotifyGet<T>(token: string, url: string, attempt = 0): Promise<T> {
+  await pace();
   const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
   if (r.status === 429) {
-    // Rate limited — honor Retry-After
-    const wait = Number(r.headers.get("Retry-After") ?? "1") * 1000;
-    if (attempt > 3) throw new Error(`Rate-limited 3x in a row on ${url}`);
-    console.warn(`  rate-limited, waiting ${wait}ms…`);
+    if (attempt >= MAX_RETRIES) throw new Error(`Rate-limited after ${MAX_RETRIES + 1} attempts on ${url}`);
+    const hint = Number(r.headers.get("Retry-After") ?? "1") * 1000;
+    const wait = Math.min(hint, MAX_RETRY_WAIT_MS);
+    process.stdout.write(`    rate-limited, sleeping ${wait}ms (attempt ${attempt + 1}/${MAX_RETRIES})\n`);
     await new Promise((res) => setTimeout(res, wait));
     return spotifyGet<T>(token, url, attempt + 1);
   }
