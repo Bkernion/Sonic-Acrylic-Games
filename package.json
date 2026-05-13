@@ -13,7 +13,9 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "seed:day": "tsx --env-file=.env.local scripts/seed-day.ts",
     "seed:all": "tsx --env-file=.env.local scripts/seed-day.ts --all",
-    "catalog": "tsx --env-file=.env.local scripts/fetch-catalog.ts"
+    "catalog": "tsx --env-file=.env.local scripts/fetch-catalog.ts",
+    "sample": "tsx scripts/sample-day.ts",
+    "distill": "tsx scripts/distill-catalog.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
