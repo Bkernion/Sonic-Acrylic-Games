@@ -79,9 +79,9 @@ async function getToken(): Promise<string> {
   return (await r.json()).access_token;
 }
 
-const REQUEST_SPACING_MS = 350;     // pre-emptive pacing — cheaper than retries
-const MAX_RETRY_WAIT_MS = 8_000;    // cap Spotify's Retry-After hint
-const MAX_RETRIES = 2;
+const REQUEST_SPACING_MS = 500;     // ~120 req/min — comfortably under Spotify's ~180/min ceiling
+const MAX_RETRY_WAIT_MS = 30_000;   // cap Spotify's Retry-After hint (sometimes 60s+ when angry)
+const MAX_RETRIES = 4;              // ride out longer cooldowns
 
 let lastRequestAt = 0;
 async function pace() {
@@ -164,17 +164,26 @@ async function fetchAlbumTracks(token: string, albumId: string): Promise<Track[]
   }));
 }
 
+async function fetchArtistById(token: string, id: string): Promise<Artist> {
+  const url = `https://api.spotify.com/v1/artists/${id}`;
+  const data = await spotifyGet<Artist & { genres?: string[]; popularity?: number }>(token, url);
+  return { id: data.id, name: data.name, genres: data.genres, popularity: data.popularity };
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const force = args.includes("--force");
-  const name = args.filter((a) => !a.startsWith("--")).join(" ").trim();
-  if (!name) {
+  const idIdx = args.indexOf("--id");
+  const explicitId = idIdx >= 0 ? args[idIdx + 1] : undefined;
+  const name = args.filter((a, i) => !a.startsWith("--") && i !== idIdx + 1).join(" ").trim();
+  if (!name && !explicitId) {
     console.error("Usage: npm run catalog -- \"<Artist Name>\" [--force]");
+    console.error("       npm run catalog -- \"<Artist Name>\" --id <spotify_artist_id> [--force]");
     process.exit(1);
   }
 
   mkdirSync(CATALOGS_DIR, { recursive: true });
-  const slug = slugify(name);
+  const slug = name ? slugify(name) : (explicitId ?? "unknown");
   const outPath = join(CATALOGS_DIR, `${slug}.json`);
 
   if (existsSync(outPath) && !force) {
@@ -185,8 +194,14 @@ async function main() {
   }
 
   const token = await getToken();
-  console.log(`Searching for "${name}"…`);
-  const artist = await searchArtist(token, name);
+  let artist: Artist;
+  if (explicitId) {
+    console.log(`Fetching artist by id ${explicitId}…`);
+    artist = await fetchArtistById(token, explicitId);
+  } else {
+    console.log(`Searching for "${name}"…`);
+    artist = await searchArtist(token, name);
+  }
   console.log(`  ✓ ${artist.name} (id ${artist.id}, popularity ${artist.popularity ?? "?"}/100)`);
   if (artist.genres?.length) console.log(`  genres: ${artist.genres.slice(0, 5).join(", ")}`);
 
