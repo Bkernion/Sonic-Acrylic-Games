@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-16",
+  "edition_no": 6,
+  "decade": "1990s",
+  "lineup_artists": [
+    "Bush",
+    "Rage Against the Machine",
+    "Counting Crows",
+    "Marilyn Manson",
+    "Limp Bizkit"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "First letter is 'M'",
+      "difficulty": 1,
+      "members": [
+        "Mr. Jones",
+        "Mouth",
+        "My Way",
+        "mOBSCENE"
+      ]
+    },
+    {
+      "name": "Songs about sleep",
+      "difficulty": 2,
+      "members": [
+        "Sleep Now in the Fire",
+        "Sweet Dreams (Are Made of This)",
+        "Mrs. Potters Lullaby",
+        "Sleeper"
+      ]
+    },
+    {
+      "name": "Songs the band didn't write",
+      "difficulty": 3,
+      "members": [
+        "Faith",
+        "Big Yellow Taxi",
+        "Maggie's Farm",
+        "Personal Jesus"
+      ]
+    },
+    {
+      "name": "Songs to break stuff to",
+      "difficulty": 4,
+      "members": [
+        "Killing in the Name",
+        "Break Stuff",
+        "The Beautiful People",
+        "Machinehead"
+      ]
+    }
+  ]
+}
