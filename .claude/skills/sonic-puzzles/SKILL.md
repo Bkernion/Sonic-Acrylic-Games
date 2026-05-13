@@ -31,9 +31,9 @@ The single fastest way to lose a daily-puzzle audience is repetition. Three hard
 
 Run `npm run history -- 180` before proposing for any day. The output lists every category name shipped in the last 180 days (≈ 6 months). If your candidate's name appears in that list (or trivially close — "Title is a place" vs "Title is a state" are the same name), **discard it and pick something else**.
 
-### Rule 2 — No category PATTERN reuse within 7 days
+### Rule 2 — No category PATTERN reuse within 30 days
 
-Patterns are bigger than names. "Released in 2020", "Released in 1973", and "Released the same year" are three different names but the SAME pattern (release-year grouping). If any pattern has been used in the last 7 days, push it to the bottom of the list. If 2+ days within the last 7 used a pattern, do not use that pattern for the next 7 days.
+Patterns are bigger than names. "Released in 2020", "Released in 1973", and "Released the same year" are three different names but the SAME pattern (release-year grouping). If any pattern has been used in the last 30 days, push it to the bottom of the list. If 2+ days within the last 30 used a pattern, do not use that pattern for the next 30 days.
 
 Patterns to track (this is not exhaustive — invent new ones):
 - `release_year` — songs released the same year
