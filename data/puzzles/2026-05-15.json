@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-15",
+  "edition_no": 5,
+  "decade": "2000s",
+  "lineup_artists": [
+    "Bring Me the Horizon",
+    "Jet",
+    "Muse",
+    "My Chemical Romance",
+    "Bloc Party"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "First word is 'The'",
+      "difficulty": 1,
+      "members": [
+        "The Dark Side",
+        "The Sadness Will Never End",
+        "The Ghost of You",
+        "The Prayer"
+      ]
+    },
+    {
+      "name": "Songs about dying",
+      "difficulty": 2,
+      "members": [
+        "Cancer",
+        "Drown",
+        "Apocalypse Please",
+        "Helicopter"
+      ]
+    },
+    {
+      "name": "Famously placed in a movie, show, or commercial",
+      "difficulty": 3,
+      "members": [
+        "Supermassive Black Hole",
+        "Banquet",
+        "Are You Gonna Be My Girl",
+        "Welcome to the Black Parade"
+      ]
+    },
+    {
+      "name": "Songs about defiance",
+      "difficulty": 4,
+      "members": [
+        "Uprising",
+        "SING",
+        "Mantra",
+        "Take It Or Leave It"
+      ]
+    }
+  ]
+}
