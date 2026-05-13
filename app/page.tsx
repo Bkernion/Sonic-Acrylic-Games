@@ -46,7 +46,7 @@ export default async function HomePage() {
       <div className="flex-1 overflow-y-auto">
         {/* Hero section — surface-warm, no border/radius */}
         {row ? (
-          <Hero headline="Today's Artists" lineup={row.lineup_artists} />
+          <Hero headline="Tonight's Five" lineup={row.lineup_artists} />
         ) : (
           <div className="mono" style={{ padding: "18px 18px 16px", color: "var(--taupe)", textTransform: "uppercase", fontSize: 11 }}>
             NEW EDITION DROPS AT MIDNIGHT ET. COME BACK THEN.
