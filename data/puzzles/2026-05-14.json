@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-14",
+  "edition_no": 4,
+  "decade": "1970s",
+  "lineup_artists": [
+    "ZZ Top",
+    "Led Zeppelin",
+    "The Allman Brothers Band",
+    "Motörhead",
+    "Aerosmith"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Title contains a color",
+      "difficulty": 1,
+      "members": [
+        "Black Dog",
+        "Cherry Red",
+        "Pink",
+        "Blackheart"
+      ]
+    },
+    {
+      "name": "Title names a place",
+      "difficulty": 2,
+      "members": [
+        "Going to California",
+        "Mexican Blackbird",
+        "Statesboro Blues",
+        "Stone Deaf in the USA"
+      ]
+    },
+    {
+      "name": "Title is a person's name",
+      "difficulty": 3,
+      "members": [
+        "Melissa",
+        "Francine",
+        "Lost Johnny",
+        "Janie's Got A Gun"
+      ]
+    },
+    {
+      "name": "A cover of an older song",
+      "difficulty": 4,
+      "members": [
+        "When the Levee Breaks",
+        "Crossroads",
+        "Helter Skelter",
+        "Jailhouse Rock"
+      ]
+    }
+  ]
+}
