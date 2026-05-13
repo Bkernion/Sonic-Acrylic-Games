@@ -8,9 +8,11 @@ type Props = {
   href?: string;
   comingSoon?: string;
   isLast?: boolean;
+  /** Render the eye-catching wiggle + "Start Here" chalk label. */
+  featured?: boolean;
 };
 
-export function GameCard({ index, kicker, title, subtitle, href, comingSoon, isLast }: Props) {
+export function GameCard({ index, kicker, title, subtitle, href, comingSoon, isLast, featured }: Props) {
   const inner = (
     <div
       style={{
@@ -20,8 +22,27 @@ export function GameCard({ index, kicker, title, subtitle, href, comingSoon, isL
         padding: "14px 18px",
         borderBottom: isLast ? undefined : "1px solid var(--hair)",
         opacity: comingSoon ? 0.6 : 1,
+        position: "relative",
       }}
     >
+      {featured ? (
+        <span
+          aria-hidden
+          className="chalk-label"
+          style={{
+            position: "absolute",
+            top: -8,
+            right: 14,
+            fontSize: 22,
+            transform: "rotate(-7deg)",
+            pointerEvents: "none",
+            whiteSpace: "nowrap",
+            zIndex: 2,
+          }}
+        >
+          Start here!
+        </span>
+      ) : null}
       <div
         className="mono"
         style={{ fontSize: 11, color: "var(--rust)", letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 4, width: 22, flexShrink: 0 }}
@@ -61,5 +82,10 @@ export function GameCard({ index, kicker, title, subtitle, href, comingSoon, isL
       </div>
     </div>
   );
-  return href ? <Link href={href} className="block">{inner}</Link> : inner;
+  if (!href) return inner;
+  return (
+    <Link href={href} className={`block ${featured ? "wiggle" : ""}`}>
+      {inner}
+    </Link>
+  );
 }

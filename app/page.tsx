@@ -68,6 +68,7 @@ export default async function HomePage() {
               href={g.href}
               comingSoon={g.comingSoon}
               isLast={idx === GAMES.length - 1}
+              featured={g.kicker === "CONNECT"}
             />
           ))}
         </div>

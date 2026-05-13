@@ -175,7 +175,11 @@ async function main() {
   const force = args.includes("--force");
   const idIdx = args.indexOf("--id");
   const explicitId = idIdx >= 0 ? args[idIdx + 1] : undefined;
-  const name = args.filter((a, i) => !a.startsWith("--") && i !== idIdx + 1).join(" ").trim();
+  // Drop flag tokens AND the value that follows --id; everything else is the name.
+  const name = args
+    .filter((a, i) => !a.startsWith("--") && (idIdx < 0 || i !== idIdx + 1))
+    .join(" ")
+    .trim();
   if (!name && !explicitId) {
     console.error("Usage: npm run catalog -- \"<Artist Name>\" [--force]");
     console.error("       npm run catalog -- \"<Artist Name>\" --id <spotify_artist_id> [--force]");

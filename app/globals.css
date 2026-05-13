@@ -92,6 +92,31 @@ html, body { background: #000; }
   overflow-wrap: anywhere;
 }
 
+/* Periodic wiggle — used on the live "Start Here" game card */
+@keyframes wiggle {
+  0%, 86%, 100% { transform: rotate(0deg); }
+  88%           { transform: rotate(-1.6deg); }
+  90%           { transform: rotate(1.6deg); }
+  92%           { transform: rotate(-1.2deg); }
+  94%           { transform: rotate(1.2deg); }
+  96%           { transform: rotate(-0.6deg); }
+  98%           { transform: rotate(0.6deg); }
+}
+.wiggle {
+  transform-origin: center;
+  animation: wiggle 5s ease-in-out infinite;
+}
+
+/* Chalk-style handwritten label — used for the "Start Here" tag */
+.chalk-label {
+  font-family: var(--font-handwritten), "Comic Sans MS", cursive;
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.35);
+  line-height: 1;
+}
+
 /* ── Prototype utility classes ───────────────────────────────── */
 
 /* Pill — square corners in Pittsburgh */
