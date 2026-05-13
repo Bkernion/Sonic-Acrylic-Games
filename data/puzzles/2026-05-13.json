@@ -1,13 +1,56 @@
 {
   "date": "2026-05-13",
   "edition_no": 3,
-  "lineup_artists": ["Mitski", "Adrianne Lenker", "Lucinda Williams", "Sharon Van Etten", "Angel Olsen"],
-  "theme_pull_quote": "Five women on the difficulty of staying. And of leaving.",
-  "marginalia_quote": "Some of these doors swing both ways.",
+  "decade": "2020s",
+  "lineup_artists": [
+    "Lucy Dacus",
+    "Inhaler",
+    "Yard Act",
+    "Waxahatchee",
+    "Maggie Rogers"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
   "connections_categories": [
-    { "name": "Title contains 'love'", "difficulty": 1, "members": ["Love Me More", "Real Love", "Love Sick", "Lovers"] },
-    { "name": "First single from an album", "difficulty": 2, "members": ["Working for the Knife", "Anything", "Comeback Story", "All the Good Times"] },
-    { "name": "Live recording exists", "difficulty": 3, "members": ["Two Slow Dancers", "Anything For You", "Drunken Angel", "Right Now"] },
-    { "name": "Album closer", "difficulty": 4, "members": ["A Pearl", "Donut Seam", "Sweet Side", "Goodbye Honey"] }
+    {
+      "name": "Titles starting with 'I'",
+      "difficulty": 1,
+      "members": [
+        "I Don't Wanna Be Funny Anymore",
+        "In My Sleep",
+        "I Walked With You A Ways",
+        "I've Got a Friend"
+      ]
+    },
+    {
+      "name": "From each artist's most recent album",
+      "difficulty": 2,
+      "members": [
+        "Big Deal",
+        "Billy (Yeah Yeah Yeah)",
+        "An Illusion",
+        "Drunk"
+      ]
+    },
+    {
+      "name": "Songs about night",
+      "difficulty": 3,
+      "members": [
+        "Night Shift",
+        "A Night On The Floor",
+        "Burns Out at Midnight",
+        "Overnight"
+      ]
+    },
+    {
+      "name": "Title matches the album name",
+      "difficulty": 4,
+      "members": [
+        "Forever Is A Feeling",
+        "It Won't Always Be Like This",
+        "The Overload",
+        "Tigers Blood"
+      ]
+    }
   ]
 }
