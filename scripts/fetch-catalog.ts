@@ -1,17 +1,19 @@
 /**
- * Fetch one artist's full Spotify catalog and cache it to data/catalogs/<slug>.json.
+ * Fetch one artist's full catalog from Deezer and cache it to
+ * data/catalogs/<slug>.json.
  *
  * Usage:
  *   npm run catalog -- "Phoebe Bridgers"
- *   npm run catalog -- "The National" --force   # re-fetch even if cached
+ *   npm run catalog -- "The Allman Brothers Band" --id 86 --force
+ *   npm run catalog -- "Some Artist" --force
  *
- * The cached JSON contains:
- *   - artist: { id, name, genres, popularity }
- *   - albums: [{ id, name, release_date, release_year, album_type, total_tracks, tracks: [...] }, ...]
+ * Deezer's public API needs no auth for catalog reads. Generous rate limits
+ * (50 req / 5 s). The output shape matches what distill-catalog.ts expects
+ * (kept compatible with the older Spotify-backed cache).
  *
- * Uses Spotify's Client Credentials flow. The artist's "top tracks" endpoint
- * returns 403 for newly-created apps (a late-2024 Spotify policy change), so we
- * walk albums → tracks instead, which gives a richer catalog anyway.
+ * We moved off Spotify on 2026-05-13 after Spotify locked Development Mode
+ * access (one Client ID per developer + endpoint restrictions, see
+ * https://developer.spotify.com/blog/2026-02-06-update-on-developer-access-and-platform-security).
  */
 
 import "dotenv/config";
@@ -20,6 +22,10 @@ import { join } from "node:path";
 
 const ROOT = process.cwd();
 const CATALOGS_DIR = join(ROOT, "data/catalogs");
+
+const REQUEST_SPACING_MS = 120;     // ~8 req/s, well under Deezer's 10/s steady-state ceiling
+const MAX_RETRY_WAIT_MS = 8_000;
+const MAX_RETRIES = 3;
 
 type Artist = {
   id: string;
@@ -39,14 +45,15 @@ type Track = {
 type Album = {
   id: string;
   name: string;
-  release_date: string;     // YYYY-MM-DD or YYYY-MM or YYYY
+  release_date: string;
   release_year: number;
-  album_type: string;       // album | single | compilation
+  album_type: string;       // album | single | ep | compilation
   total_tracks: number;
   tracks: Track[];
 };
 
 type Catalog = {
+  source: "deezer";
   artist: Artist;
   fetched_at: string;
   albums: Album[];
@@ -56,32 +63,10 @@ function slugify(name: string): string {
   return name
     .toLowerCase()
     .normalize("NFKD")
-    .replace(/[̀-ͯ]/g, "")        // strip accents
+    .replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
-
-async function getToken(): Promise<string> {
-  const id = process.env.SPOTIFY_CLIENT_ID;
-  const secret = process.env.SPOTIFY_CLIENT_SECRET;
-  if (!id || !secret) {
-    throw new Error("SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET missing from .env.local");
-  }
-  const r = await fetch("https://accounts.spotify.com/api/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: "Basic " + Buffer.from(`${id}:${secret}`).toString("base64"),
-    },
-    body: "grant_type=client_credentials",
-  });
-  if (!r.ok) throw new Error(`Token request failed: ${r.status} ${await r.text()}`);
-  return (await r.json()).access_token;
-}
-
-const REQUEST_SPACING_MS = 500;     // ~120 req/min — comfortably under Spotify's ~180/min ceiling
-const MAX_RETRY_WAIT_MS = 30_000;   // cap Spotify's Retry-After hint (sometimes 60s+ when angry)
-const MAX_RETRIES = 4;              // ride out longer cooldowns
 
 let lastRequestAt = 0;
 async function pace() {
@@ -92,82 +77,106 @@ async function pace() {
   lastRequestAt = Date.now();
 }
 
-async function spotifyGet<T>(token: string, url: string, attempt = 0): Promise<T> {
+async function deezerGet<T>(url: string, attempt = 0): Promise<T> {
   await pace();
-  const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-  if (r.status === 429) {
-    if (attempt >= MAX_RETRIES) throw new Error(`Rate-limited after ${MAX_RETRIES + 1} attempts on ${url}`);
-    const hint = Number(r.headers.get("Retry-After") ?? "1") * 1000;
-    const wait = Math.min(hint, MAX_RETRY_WAIT_MS);
-    process.stdout.write(`    rate-limited, sleeping ${wait}ms (attempt ${attempt + 1}/${MAX_RETRIES})\n`);
+  const r = await fetch(url, { headers: { Accept: "application/json" } });
+  if (r.status === 429 || r.status >= 500) {
+    if (attempt >= MAX_RETRIES) throw new Error(`Failed after ${MAX_RETRIES + 1} attempts: ${r.status} ${url}`);
+    const wait = Math.min(MAX_RETRY_WAIT_MS, 500 * Math.pow(2, attempt));
+    process.stdout.write(`    ${r.status} retrying in ${wait}ms (attempt ${attempt + 1}/${MAX_RETRIES})\n`);
     await new Promise((res) => setTimeout(res, wait));
-    return spotifyGet<T>(token, url, attempt + 1);
+    return deezerGet<T>(url, attempt + 1);
   }
   if (!r.ok) throw new Error(`GET ${url} → ${r.status} ${await r.text()}`);
-  return r.json() as Promise<T>;
+  const data = await r.json() as T & { error?: { code: number; message: string } };
+  // Deezer returns 200 with { error: { code, message } } for some errors (e.g. quota)
+  if ((data as { error?: unknown }).error) {
+    const e = (data as { error: { code: number; message: string } }).error;
+    if (e.code === 4 && attempt < MAX_RETRIES) {                  // quota exceeded
+      const wait = 5_000 + 2_000 * attempt;
+      process.stdout.write(`    quota hit, sleeping ${wait}ms (attempt ${attempt + 1}/${MAX_RETRIES})\n`);
+      await new Promise((res) => setTimeout(res, wait));
+      return deezerGet<T>(url, attempt + 1);
+    }
+    throw new Error(`Deezer error ${e.code}: ${e.message} (${url})`);
+  }
+  return data;
 }
 
-async function searchArtist(token: string, name: string): Promise<Artist> {
-  const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(`artist:"${name}"`)}&type=artist&limit=5&market=US`;
-  type SearchResp = { artists: { items: (Artist & { genres: string[]; popularity: number })[] } };
-  const data = await spotifyGet<SearchResp>(token, url);
-  if (!data.artists?.items?.length) throw new Error(`No Spotify artist found for "${name}"`);
-  // Prefer exact name match (case-insensitive); otherwise take first result.
-  const exact = data.artists.items.find((a) => a.name.toLowerCase() === name.toLowerCase());
-  const chosen = exact ?? data.artists.items[0];
-  return {
-    id: chosen.id,
-    name: chosen.name,
-    genres: chosen.genres,
-    popularity: chosen.popularity,
-  };
+type DeezerSearchArtist = {
+  id: number;
+  name: string;
+  nb_album: number;
+  nb_fan: number;
+};
+type DeezerArtist = {
+  id: number;
+  name: string;
+  nb_album: number;
+  nb_fan: number;
+};
+type DeezerAlbumStub = {
+  id: number;
+  title: string;
+  release_date: string;        // YYYY-MM-DD or sometimes YYYY
+  record_type: string;         // album | single | ep | compilation
+};
+type DeezerTrack = {
+  id: number;
+  title: string;
+  track_position: number;
+  duration: number;            // seconds
+  explicit_lyrics: boolean;
+};
+type DeezerListResp<T> = {
+  data: T[];
+  total: number;
+  next?: string;
+};
+
+async function searchArtist(name: string): Promise<Artist> {
+  const url = `https://api.deezer.com/search/artist?q=${encodeURIComponent(name)}&limit=10`;
+  const data = await deezerGet<DeezerListResp<DeezerSearchArtist>>(url);
+  if (!data.data?.length) throw new Error(`No Deezer artist found for "${name}"`);
+  // Prefer an exact name match (case-insensitive); fall back to the highest-fanned result.
+  const exact = data.data.find((a) => a.name.toLowerCase() === name.toLowerCase());
+  const chosen = exact ?? data.data.sort((x, y) => (y.nb_fan ?? 0) - (x.nb_fan ?? 0))[0];
+  return { id: String(chosen.id), name: chosen.name, popularity: chosen.nb_fan };
 }
 
-async function fetchAllAlbums(
-  token: string,
-  artistId: string,
-): Promise<{ id: string; name: string; release_date: string; album_type: string; total_tracks: number }[]> {
-  // Studio albums and singles only — skip compilations and "appears on".
-  type AlbumsPage = {
-    items: { id: string; name: string; release_date: string; album_type: string; total_tracks: number }[];
-    next: string | null;
-  };
-  const all: AlbumsPage["items"] = [];
-  let next: string | null =
-    `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album,single&limit=10&market=US`;
+async function fetchArtistById(id: string): Promise<Artist> {
+  const data = await deezerGet<DeezerArtist>(`https://api.deezer.com/artist/${id}`);
+  return { id: String(data.id), name: data.name, popularity: data.nb_fan };
+}
+
+async function fetchAllAlbums(artistId: string): Promise<DeezerAlbumStub[]> {
+  const out: DeezerAlbumStub[] = [];
+  let next: string | undefined = `https://api.deezer.com/artist/${artistId}/albums?limit=100&index=0`;
   while (next) {
-    const page: AlbumsPage = await spotifyGet<AlbumsPage>(token, next);
-    all.push(...page.items);
+    const page = await deezerGet<DeezerListResp<DeezerAlbumStub>>(next);
+    out.push(...page.data);
     next = page.next;
   }
-  return all;
+  return out;
 }
 
-async function fetchAlbumTracks(token: string, albumId: string): Promise<Track[]> {
-  type TracksPage = {
-    items: { id: string; name: string; track_number: number; duration_ms: number; explicit: boolean }[];
-    next: string | null;
-  };
-  const all: TracksPage["items"] = [];
-  let next: string | null = `https://api.spotify.com/v1/albums/${albumId}/tracks?limit=20&market=US`;
+async function fetchAlbumTracks(albumId: string): Promise<Track[]> {
+  const out: Track[] = [];
+  let next: string | undefined = `https://api.deezer.com/album/${albumId}/tracks?limit=100&index=0`;
   while (next) {
-    const page: TracksPage = await spotifyGet<TracksPage>(token, next);
-    all.push(...page.items);
+    const page = await deezerGet<DeezerListResp<DeezerTrack>>(next);
+    for (const t of page.data) {
+      out.push({
+        id: String(t.id),
+        name: t.title,
+        track_number: t.track_position,
+        duration_ms: (t.duration ?? 0) * 1000,
+        explicit: t.explicit_lyrics,
+      });
+    }
     next = page.next;
   }
-  return all.map((t) => ({
-    id: t.id,
-    name: t.name,
-    track_number: t.track_number,
-    duration_ms: t.duration_ms,
-    explicit: t.explicit,
-  }));
-}
-
-async function fetchArtistById(token: string, id: string): Promise<Artist> {
-  const url = `https://api.spotify.com/v1/artists/${id}`;
-  const data = await spotifyGet<Artist & { genres?: string[]; popularity?: number }>(token, url);
-  return { id: data.id, name: data.name, genres: data.genres, popularity: data.popularity };
+  return out;
 }
 
 async function main() {
@@ -175,70 +184,67 @@ async function main() {
   const force = args.includes("--force");
   const idIdx = args.indexOf("--id");
   const explicitId = idIdx >= 0 ? args[idIdx + 1] : undefined;
-  // Drop flag tokens AND the value that follows --id; everything else is the name.
   const name = args
     .filter((a, i) => !a.startsWith("--") && (idIdx < 0 || i !== idIdx + 1))
     .join(" ")
     .trim();
   if (!name && !explicitId) {
-    console.error("Usage: npm run catalog -- \"<Artist Name>\" [--force]");
-    console.error("       npm run catalog -- \"<Artist Name>\" --id <spotify_artist_id> [--force]");
+    console.error('Usage: npm run catalog -- "<Artist Name>" [--id <deezer_id>] [--force]');
     process.exit(1);
   }
 
   mkdirSync(CATALOGS_DIR, { recursive: true });
-  const slug = name ? slugify(name) : (explicitId ?? "unknown");
+  const slug = name ? slugify(name) : `deezer-${explicitId}`;
   const outPath = join(CATALOGS_DIR, `${slug}.json`);
 
   if (existsSync(outPath) && !force) {
     const existing = JSON.parse(readFileSync(outPath, "utf8")) as Catalog;
-    console.log(`Already cached: ${existing.artist.name} (${existing.albums.length} albums, fetched ${existing.fetched_at}).`);
-    console.log(`Re-fetch with --force.`);
+    console.log(
+      `Already cached: ${existing.artist.name} (${existing.albums.length} releases, fetched ${existing.fetched_at}, source=${existing.source ?? "spotify"}).`,
+    );
+    console.log("Re-fetch with --force.");
     return;
   }
 
-  const token = await getToken();
   let artist: Artist;
   if (explicitId) {
-    console.log(`Fetching artist by id ${explicitId}…`);
-    artist = await fetchArtistById(token, explicitId);
+    console.log(`Fetching artist by Deezer id ${explicitId}…`);
+    artist = await fetchArtistById(explicitId);
   } else {
-    console.log(`Searching for "${name}"…`);
-    artist = await searchArtist(token, name);
+    console.log(`Searching Deezer for "${name}"…`);
+    artist = await searchArtist(name);
   }
-  console.log(`  ✓ ${artist.name} (id ${artist.id}, popularity ${artist.popularity ?? "?"}/100)`);
-  if (artist.genres?.length) console.log(`  genres: ${artist.genres.slice(0, 5).join(", ")}`);
+  console.log(`  ✓ ${artist.name} (id ${artist.id}, fans ${artist.popularity ?? "?"})`);
 
-  console.log(`Fetching albums…`);
-  const albumStubs = await fetchAllAlbums(token, artist.id);
-  console.log(`  ✓ ${albumStubs.length} albums + singles`);
+  console.log("Fetching albums…");
+  const albumStubs = await fetchAllAlbums(artist.id);
+  console.log(`  ✓ ${albumStubs.length} releases`);
 
   const albums: Album[] = [];
-  let failedAlbums = 0;
+  let failed = 0;
   for (const a of albumStubs) {
     try {
-      const tracks = await fetchAlbumTracks(token, a.id);
+      const tracks = await fetchAlbumTracks(String(a.id));
       const year = Number(a.release_date.slice(0, 4));
       albums.push({
-        id: a.id,
-        name: a.name,
+        id: String(a.id),
+        name: a.title,
         release_date: a.release_date,
         release_year: Number.isFinite(year) ? year : 0,
-        album_type: a.album_type,
-        total_tracks: a.total_tracks,
+        album_type: a.record_type,
+        total_tracks: tracks.length,
         tracks,
       });
-      process.stdout.write(`  · ${a.name} (${a.release_date.slice(0, 4)}, ${tracks.length} tracks)\n`);
+      process.stdout.write(`  · ${a.title} (${a.release_date.slice(0, 4)}, ${tracks.length} tracks)\n`);
     } catch (e) {
-      failedAlbums++;
-      process.stdout.write(`  ! skipped ${a.name} (${a.release_date.slice(0, 4)}): ${(e as Error).message.split("\n")[0]}\n`);
+      failed++;
+      process.stdout.write(`  ! skipped ${a.title} (${a.release_date.slice(0, 4)}): ${(e as Error).message.split("\n")[0]}\n`);
     }
   }
-  if (failedAlbums) {
-    console.warn(`  ${failedAlbums} album(s) failed and were skipped. Re-run with --force to retry.`);
-  }
+  if (failed) console.warn(`  ${failed} release(s) failed and were skipped.`);
 
   const catalog: Catalog = {
+    source: "deezer",
     artist,
     fetched_at: new Date().toISOString(),
     albums: albums.sort((x, y) => x.release_year - y.release_year),
@@ -247,7 +253,7 @@ async function main() {
 
   const tracksTotal = albums.reduce((n, a) => n + a.tracks.length, 0);
   console.log(`\n✓ Wrote ${outPath}`);
-  console.log(`  ${albums.length} albums · ${tracksTotal} tracks · ${(JSON.stringify(catalog).length / 1024).toFixed(1)} KB`);
+  console.log(`  ${albums.length} releases · ${tracksTotal} tracks · ${(JSON.stringify(catalog).length / 1024).toFixed(1)} KB`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
