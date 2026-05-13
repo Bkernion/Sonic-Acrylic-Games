@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-17",
+  "edition_no": 7,
+  "decade": "2020s",
+  "lineup_artists": [
+    "Soccer Mommy",
+    "Turnstile",
+    "Bad Omens",
+    "Olivia Rodrigo",
+    "Wednesday"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Title invokes a creature",
+      "difficulty": 1,
+      "members": [
+        "vampire",
+        "BIRDS",
+        "Coyote",
+        "F E R A L"
+      ]
+    },
+    {
+      "name": "Title ends in punctuation",
+      "difficulty": 2,
+      "members": [
+        "bad idea right?",
+        "Somebody else.",
+        "Fate Is…",
+        "T.L.C. (TURNSTILE LOVE CONNECTION)"
+      ]
+    },
+    {
+      "name": "Title names a girl, man, or other person",
+      "difficulty": 3,
+      "members": [
+        "Last Girl",
+        "ballad of a homeschooled girl",
+        "Handsome Man",
+        "MAGIC MAN"
+      ]
+    },
+    {
+      "name": "Songs about an intimate moment",
+      "difficulty": 4,
+      "members": [
+        "night swimming",
+        "making the bed",
+        "Cody's Only",
+        "ALIEN LOVE CALL"
+      ]
+    }
+  ]
+}
