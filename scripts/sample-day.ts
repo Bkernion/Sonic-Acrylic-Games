@@ -139,11 +139,12 @@ function sampleOneDay(
   pool: Record<Decade, string[]>,
   cooldown: Set<string>,
   previousDecade: Decade | null,
+  excludeDecades: Decade[] = [],
 ): Lineup {
   const rng = seededRng(date);
-  const decadeChoices = previousDecade
-    ? DECADES.filter((d) => d !== previousDecade)
-    : DECADES;
+  const excludeSet = new Set<Decade>(excludeDecades);
+  if (previousDecade) excludeSet.add(previousDecade);
+  const decadeChoices = DECADES.filter((d) => !excludeSet.has(d));
   const decade: Decade = pick(decadeChoices, rng);
   const all = pool[decade];
   const fresh = all.filter((a) => !cooldown.has(a));
@@ -173,6 +174,14 @@ function main() {
   }
   const rangeIdx = args.indexOf("--range");
   const range = rangeIdx >= 0 ? Math.max(1, parseInt(args[rangeIdx + 1] ?? "1", 10)) : 1;
+  const excludeIdx = args.indexOf("--exclude-decade");
+  const excludeDecades: Decade[] =
+    excludeIdx >= 0
+      ? (args[excludeIdx + 1] ?? "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter((s): s is Decade => DECADES.includes(s as Decade))
+      : [];
 
   const pool = loadArtistPool();
   const lineups: Lineup[] = [];
@@ -194,7 +203,7 @@ function main() {
     const prevLineup = lineups[lineups.length - 1];
     const previousDecade: Decade | null =
       prevLineup?.decade ?? loadPreviousDecade(date, pool);
-    lineups.push(sampleOneDay(date, pool, cooldown, previousDecade));
+    lineups.push(sampleOneDay(date, pool, cooldown, previousDecade, excludeDecades));
   }
 
   console.log(JSON.stringify(range === 1 ? lineups[0] : lineups, null, 2));
