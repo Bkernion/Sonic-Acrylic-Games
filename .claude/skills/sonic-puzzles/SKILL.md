@@ -27,9 +27,9 @@ You are coaching Ben through a batch generation of daily Connections puzzles. Be
 
 The single fastest way to lose a daily-puzzle audience is repetition. Three hard rules:
 
-### Rule 1 — No category NAME reuse within 30 days
+### Rule 1 — No category NAME reuse within 180 days
 
-Run `npm run history -- 30` before proposing for any day. The output lists every category name shipped in the last 30 days. If your candidate's name appears in that list (or trivially close — "Title is a place" vs "Title is a state" are the same name), **discard it and pick something else**.
+Run `npm run history -- 180` before proposing for any day. The output lists every category name shipped in the last 180 days (≈ 6 months). If your candidate's name appears in that list (or trivially close — "Title is a place" vs "Title is a state" are the same name), **discard it and pick something else**.
 
 ### Rule 2 — No category PATTERN reuse within 7 days
 
@@ -105,7 +105,7 @@ For day D with artists [A, B, C, D, E]:
 
 1. **Pull the recent-category log first** (this is the novelty guard rail):
    ```bash
-   npm run history -- 30
+   npm run history -- 180
    ```
    Save the output in working memory. As you compose candidates, you'll check every category name against this list and skip anything that's a repeat or trivial-paraphrase.
 
@@ -118,7 +118,7 @@ For day D with artists [A, B, C, D, E]:
 3. Look for **patterns and overlaps** across the 5 catalogs, working from the pattern library in the "Novelty rules" section. For each candidate pattern you find, mentally tag it with its axis (STRUCTURAL / TEMPORAL / THEMATIC / CROSS-ARTIST).
 
 4. **Compose 5 candidate puzzles**, each one a 4-tuple of categories. Each candidate must:
-   - Have 4 categories with clever, fresh names (no repeats from `history -- 30`)
+   - Have 4 categories with clever, fresh names (no repeats from `history -- 180`)
    - Have 4 verified-real song titles per category
    - Cover **at least 3 of the 4 axes** (4 is gold; 2 or fewer = redo)
    - Have difficulty tier 1 → 4 assigned, easiest to hardest
