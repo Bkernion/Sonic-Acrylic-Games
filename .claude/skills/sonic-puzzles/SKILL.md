@@ -23,6 +23,53 @@ You are coaching Ben through a batch generation of daily Connections puzzles. Be
   - 4 (hardest): clever lateral connection — songs whose titles are also album names by other artists, songs that share a producer, etc. Reach.
 - Difficulty 1 and 2 should be solvable by a casual fan. 3 and 4 reward deep listening.
 
+## Novelty rules — read before proposing anything
+
+The single fastest way to lose a daily-puzzle audience is repetition. Three hard rules:
+
+### Rule 1 — No category NAME reuse within 30 days
+
+Run `npm run history -- 30` before proposing for any day. The output lists every category name shipped in the last 30 days. If your candidate's name appears in that list (or trivially close — "Title is a place" vs "Title is a state" are the same name), **discard it and pick something else**.
+
+### Rule 2 — No category PATTERN reuse within 7 days
+
+Patterns are bigger than names. "Released in 2020", "Released in 1973", and "Released the same year" are three different names but the SAME pattern (release-year grouping). If any pattern has been used in the last 7 days, push it to the bottom of the list. If 2+ days within the last 7 used a pattern, do not use that pattern for the next 7 days.
+
+Patterns to track (this is not exhaustive — invent new ones):
+- `release_year` — songs released the same year
+- `track_number` — same position on their respective albums (e.g., all Track 1s, all closers)
+- `album_role` — album opener / closer / lead single / bonus track / hidden track
+- `title_word_count` — one-word, two-word, three-word, etc.
+- `title_contains_word` — songs whose titles include a specific word
+- `title_theme` — songs whose titles share a topic (places, weather, body parts, names, colors, etc.)
+- `title_structure` — all-caps, all-lowercase, contains punctuation, has parentheses
+- `title_length` — titles shorter than X chars, longer than X chars
+- `duration` — songs over/under a duration threshold
+- `appears_on_X` — soundtrack, live album, compilation, covers album
+- `lyrics_reference` — songs whose lyrics name another artist, a city, a year
+- `decade_anchor` — released the same calendar year as a famous cultural event
+- `solo_vs_band` — solo project tracks from band members in the lineup
+- `cover_song` — covers that the artist did of someone else's track
+- `appears_in_film` — songs in a movie/TV show
+- `b_side` — songs that were B-sides or non-album singles
+- `same_producer` — songs sharing a producer (skip unless verifiable in the cached data)
+- `same_collaborator` — features with the same guest artist
+- `chart_position` — songs that hit a chart peak
+- `seasonal` — songs about a season, holiday, or month
+- `narrative_voice` — songs in first/second/third person, songs as dialogue
+
+### Rule 3 — Four-axis variety WITHIN each day
+
+Each day has 4 categories. They should span **four different pattern axes**, not crowd into one. Bad day: all 4 categories are release-year-grouped. Good day: one from structural (title word count), one from time (release year), one from thematic (titles share a theme), one from cross-artist (covers, features, shared producer).
+
+The four axes:
+- **STRUCTURAL** — title word count / length / capitalization / punctuation; track number; duration.
+- **TEMPORAL** — release year, era, decade.
+- **THEMATIC** — title content theme (places, weather, names, body parts, colors, emotions, objects).
+- **CROSS-ARTIST** — features, covers, shared producer / collaborator / soundtrack appearance.
+
+When proposing 5 candidate puzzles, score yourself: each candidate should hit at least 3 axes; 4 axes is gold. If a candidate's 4 categories are all on the same axis, redo it.
+
 ## Run mode
 
 When invoked, ask Ben:
@@ -56,35 +103,38 @@ Be patient — Spotify rate-limits at ~180 calls/min. You can run multiple `npm 
 
 For day D with artists [A, B, C, D, E]:
 
-1. Read each artist's distilled catalog:
+1. **Pull the recent-category log first** (this is the novelty guard rail):
+   ```bash
+   npm run history -- 30
+   ```
+   Save the output in working memory. As you compose candidates, you'll check every category name against this list and skip anything that's a repeat or trivial-paraphrase.
+
+2. Read each artist's distilled catalog:
    ```bash
    npm run distill -- "<artist>"
    ```
    This gives you the artist's studio albums with track names + years.
 
-2. Look for **patterns and overlaps** across the 5 catalogs:
-   - Shared release years (multiple artists with albums in 2020)
-   - Shared track numbers (multiple "Track 1"s)
-   - Shared title structures (one-word, two-word, all-caps in source)
-   - Thematic overlaps (places, weather, names, body parts, colors)
-   - Genre/structural patterns (live albums, covers, instrumentals)
+3. Look for **patterns and overlaps** across the 5 catalogs, working from the pattern library in the "Novelty rules" section. For each candidate pattern you find, mentally tag it with its axis (STRUCTURAL / TEMPORAL / THEMATIC / CROSS-ARTIST).
 
-3. **Compose 5 candidate puzzles**. Each candidate must have:
-   - 4 categories with clever names
-   - 4 verified-real song titles per category
-   - Difficulty tier (1–4) on each category
-   - Each song appears in exactly one category (no overlap across categories within a candidate)
+4. **Compose 5 candidate puzzles**, each one a 4-tuple of categories. Each candidate must:
+   - Have 4 categories with clever, fresh names (no repeats from `history -- 30`)
+   - Have 4 verified-real song titles per category
+   - Cover **at least 3 of the 4 axes** (4 is gold; 2 or fewer = redo)
+   - Have difficulty tier 1 → 4 assigned, easiest to hardest
+   - Have no song appearing in more than one category within the candidate
+   - Spread the source artists across the categories (no category drawn from only one artist if avoidable)
 
-4. Show all 5 candidates to Ben in a compact format:
+5. Show all 5 candidates to Ben in a compact format:
 
    ```
-   Candidate A — "Two-word titles"
-     [1] Track 1s from debut albums — Smoke Signals, Funeral, ...
-     [2] One-word titles — Punisher, Funeral, ...
-     [3] Released in 2020 — Punisher, ...
-     [4] Songs longer than 5 minutes — ICU, ...
+   Candidate A — axes: STRUCTURAL · TEMPORAL · THEMATIC · CROSS-ARTIST  ✓ all 4 hit
+     [1] Track 1s from a debut LP — Smoke Signals, ...     (STRUCTURAL)
+     [2] Released in 2020 — Punisher, ...                  (TEMPORAL)
+     [3] Titles that are bodies of water — Moon Song, ...  (THEMATIC)
+     [4] Solo tracks from boygenius members — Funeral, ... (CROSS-ARTIST)
 
-   Candidate B — ...
+   Candidate B — axes: STRUCTURAL · STRUCTURAL · THEMATIC · THEMATIC  ✗ only 2 axes — redo
    ```
 
 5. Ben says "B" (or "A with the second category renamed to X" or "redo, none of these"). If he wants edits, apply them. If he wants a re-do, propose 5 NEW candidates with a different angle.
