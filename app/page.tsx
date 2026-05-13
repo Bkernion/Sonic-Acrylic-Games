@@ -53,8 +53,8 @@ export default async function HomePage() {
           </div>
         )}
 
-        {/* "Today's six" rule — left-aligned, no flanking hairlines */}
-        <div className="rule one" style={{ padding: "14px 18px 6px" }}>Today&apos;s six</div>
+        {/* "Today's Games" rule — left-aligned, no flanking hairlines */}
+        <div className="rule one" style={{ padding: "14px 18px 6px" }}>Today&apos;s Games</div>
 
         {/* Games — hairline-separated rows, no card backgrounds */}
         <div>
