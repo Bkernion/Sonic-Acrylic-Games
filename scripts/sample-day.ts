@@ -95,15 +95,56 @@ function loadRecentlyUsedArtists(beforeDate: string, withinDays: number): Set<st
   return used;
 }
 
+function inferDecadeFromArtists(
+  artists: string[],
+  pool: Record<Decade, string[]>,
+): Decade | null {
+  const counts = new Map<Decade, number>();
+  for (const a of artists) {
+    for (const d of DECADES) {
+      if (pool[d].includes(a)) counts.set(d, (counts.get(d) ?? 0) + 1);
+    }
+  }
+  let best: Decade | null = null;
+  let bestN = 0;
+  for (const [d, n] of counts) if (n > bestN) { bestN = n; best = d; }
+  return best;
+}
+
+/** Peek at the puzzle JSON for the day before `date`. Prefer an explicit
+ *  `decade` field; otherwise infer from `lineup_artists` against the pool;
+ *  otherwise null (no constraint). */
+function loadPreviousDecade(
+  date: string,
+  pool: Record<Decade, string[]>,
+): Decade | null {
+  const prev = addDays(date, -1);
+  const path = join(PUZZLES_DIR, `${prev}.json`);
+  if (!existsSync(path)) return null;
+  try {
+    const data = JSON.parse(readFileSync(path, "utf8")) as {
+      decade?: Decade;
+      lineup_artists?: string[];
+    };
+    if (data.decade && DECADES.includes(data.decade)) return data.decade;
+    if (data.lineup_artists) return inferDecadeFromArtists(data.lineup_artists, pool);
+  } catch {}
+  return null;
+}
+
 type Lineup = { date: string; decade: Decade; artists: string[]; warnings?: string[] };
 
 function sampleOneDay(
   date: string,
   pool: Record<Decade, string[]>,
   cooldown: Set<string>,
+  previousDecade: Decade | null,
 ): Lineup {
   const rng = seededRng(date);
-  const decade: Decade = pick(DECADES, rng);
+  const decadeChoices = previousDecade
+    ? DECADES.filter((d) => d !== previousDecade)
+    : DECADES;
+  const decade: Decade = pick(decadeChoices, rng);
   const all = pool[decade];
   const fresh = all.filter((a) => !cooldown.has(a));
   const warnings: string[] = [];
@@ -147,7 +188,13 @@ function main() {
       );
       if (daysAgo > 0 && daysAgo <= COOLDOWN_DAYS) for (const a of prev.artists) cooldown.add(a);
     }
-    lineups.push(sampleOneDay(date, pool, cooldown));
+    // Previous decade for the "no same decade two days in a row" rule.
+    // First day of the batch peeks at the puzzle JSON for D-1 (if any);
+    // subsequent days use the lineup we just generated.
+    const prevLineup = lineups[lineups.length - 1];
+    const previousDecade: Decade | null =
+      prevLineup?.decade ?? loadPreviousDecade(date, pool);
+    lineups.push(sampleOneDay(date, pool, cooldown, previousDecade));
   }
 
   console.log(JSON.stringify(range === 1 ? lineups[0] : lineups, null, 2));

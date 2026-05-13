@@ -141,12 +141,13 @@ For day D with artists [A, B, C, D, E]:
 
 ## Step 4 — Write the JSON and move to the next day
 
-When Ben picks a candidate, write `data/puzzles/YYYY-MM-DD.json` matching the schema in `scripts/seed-day.ts`:
+When Ben picks a candidate, write `data/puzzles/YYYY-MM-DD.json` matching the schema in `scripts/seed-day.ts`. Include `decade` (from the sampled lineup) — `seed-day.ts` ignores unknown fields, but the sampler reads `decade` from yesterday's puzzle to enforce the "no same decade two days in a row" rule.
 
 ```json
 {
   "date": "2026-05-14",
   "edition_no": 4,
+  "decade": "2020s",
   "lineup_artists": ["Artist A", "Artist B", "Artist C", "Artist D", "Artist E"],
   "theme_pull_quote": null,
   "marginalia_quote": null,
