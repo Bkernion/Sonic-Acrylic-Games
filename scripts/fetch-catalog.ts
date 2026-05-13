@@ -79,8 +79,8 @@ async function getToken(): Promise<string> {
   return (await r.json()).access_token;
 }
 
-const REQUEST_SPACING_MS = 200;     // pre-emptive pacing — cheaper than retries
-const MAX_RETRY_WAIT_MS = 10_000;   // cap Spotify's Retry-After hint
+const REQUEST_SPACING_MS = 350;     // pre-emptive pacing — cheaper than retries
+const MAX_RETRY_WAIT_MS = 8_000;    // cap Spotify's Retry-After hint
 const MAX_RETRIES = 2;
 
 let lastRequestAt = 0;
@@ -195,19 +195,28 @@ async function main() {
   console.log(`  ✓ ${albumStubs.length} albums + singles`);
 
   const albums: Album[] = [];
+  let failedAlbums = 0;
   for (const a of albumStubs) {
-    const tracks = await fetchAlbumTracks(token, a.id);
-    const year = Number(a.release_date.slice(0, 4));
-    albums.push({
-      id: a.id,
-      name: a.name,
-      release_date: a.release_date,
-      release_year: Number.isFinite(year) ? year : 0,
-      album_type: a.album_type,
-      total_tracks: a.total_tracks,
-      tracks,
-    });
-    process.stdout.write(`  · ${a.name} (${a.release_date.slice(0, 4)}, ${tracks.length} tracks)\n`);
+    try {
+      const tracks = await fetchAlbumTracks(token, a.id);
+      const year = Number(a.release_date.slice(0, 4));
+      albums.push({
+        id: a.id,
+        name: a.name,
+        release_date: a.release_date,
+        release_year: Number.isFinite(year) ? year : 0,
+        album_type: a.album_type,
+        total_tracks: a.total_tracks,
+        tracks,
+      });
+      process.stdout.write(`  · ${a.name} (${a.release_date.slice(0, 4)}, ${tracks.length} tracks)\n`);
+    } catch (e) {
+      failedAlbums++;
+      process.stdout.write(`  ! skipped ${a.name} (${a.release_date.slice(0, 4)}): ${(e as Error).message.split("\n")[0]}\n`);
+    }
+  }
+  if (failedAlbums) {
+    console.warn(`  ${failedAlbums} album(s) failed and were skipped. Re-run with --force to retry.`);
   }
 
   const catalog: Catalog = {
