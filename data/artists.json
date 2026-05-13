@@ -9,10 +9,10 @@
       "1970s": 35,
       "1980s": 27,
       "1990s": 36,
-      "2000s": 33,
-      "2010s": 31,
+      "2000s": 34,
+      "2010s": 32,
       "2020s": 34,
-      "total_entries": 222
+      "total_entries": 224
     }
   },
 
@@ -185,7 +185,8 @@
     "Bloc Party",
     "Franz Ferdinand",
     "The Shins",
-    "Sufjan Stevens"
+    "Sufjan Stevens",
+    "A Perfect Circle"
   ],
 
   "2010s": [
@@ -219,7 +220,8 @@
     "Father John Misty",
     "Mitski",
     "Phoebe Bridgers",
-    "Big Thief"
+    "Big Thief",
+    "Puscifer"
   ],
 
   "2020s": [
