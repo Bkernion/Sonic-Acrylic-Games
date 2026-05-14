@@ -1,6 +1,6 @@
 ---
 name: sonic-puzzles
-description: Generate daily Sonic Acrylic Games Connections puzzles in batches. Use when Ben says "make tomorrow's puzzle", "generate the next N days", "/sonic-puzzles", "let's batch puzzles", or anything similar. Pulls real song titles + years from Spotify, proposes 5 candidate puzzles per day, Ben picks, you write the JSONs and seed.
+description: Generate daily Sonic Acrylic Games Connections puzzles in batches. Use when Ben says "make tomorrow's puzzle", "generate the next N days", "/sonic-puzzles", "let's batch puzzles", or anything similar. Pulls real song titles + years from Deezer, proposes 5 candidate puzzles per day, Ben picks, you write the JSONs and seed.
 ---
 
 # Sonic Acrylic Games — daily puzzle batcher
@@ -10,7 +10,7 @@ You are coaching Ben through a batch generation of daily Connections puzzles. Be
 ## The contract — what a "good" Connections puzzle looks like
 
 - **Exactly 4 categories**, each with **exactly 4 song titles** drawn from the day's 5 artists.
-- All 16 song titles must be **real and verifiable** in the cached Spotify catalogs you read. Never invent a title; never use a track that isn't in the data.
+- All 16 song titles must be **real and verifiable** in the cached Deezer catalogs you read. Never invent a title; never use a track that isn't in the data.
 - Categories must be **clever, not lazy**. The bar is:
   - Bad: "Songs with the word 'love'" / "Songs by Phoebe Bridgers"
   - Good: "Track 1 from a debut LP" / "Released in 2007" / "Title is a place" / "Songs over 6 minutes" / "Title is one word"
@@ -85,7 +85,15 @@ cd "/Volumes/Ben's SSD 1/KCL Products/Sonic Acrylic Games"
 npm run sample -- <start-date> --range <N>
 ```
 
-This prints an array of `{ date, decade, artists }` objects, date-seeded so the same date always picks the same lineup, with a 14-day artist cooldown. Save it mentally / in a TodoWrite.
+This prints an array of `{ date, decade, artists }` objects, date-seeded so the same date always picks the same lineup, with a 14-day artist cooldown and the "no same decade as yesterday" rule. Save it mentally / in a TodoWrite.
+
+**In-batch decade collision pitfall.** The sampler reads `decade` from `data/puzzles/<D-1>.json` to enforce the neighbor rule. During a batch, day D-1 may not be written to disk yet — so the sampler can pick the same decade as the candidate you were about to ship for D-1. Workaround: pass `--exclude-decade` with a comma-separated list of decades to forbid:
+
+```bash
+npm run sample -- 2026-05-15 --range 3 --exclude-decade 2020s,2010s,1990s
+```
+
+Also useful when Ben wants a specific shift mid-batch ("do non-2020s for Friday").
 
 Show Ben the full list (just dates + decades + artists) in a tight format. Let him veto any lineup ("re-roll 5/18", "swap Nickelback for Tool", etc.). When he asks for a re-roll, just hand-pick a substitute from the same decade in `data/artists.json` — don't try to rerun the script for one date (it's date-seeded, would produce the same result).
 
@@ -97,7 +105,16 @@ For every unique artist across all lineups, check `data/catalogs/<slug>.json`. I
 npm run catalog -- "<Artist Name>"
 ```
 
-Be patient — Spotify rate-limits at ~180 calls/min. You can run multiple `npm run catalog` in serial; the script handles 429s automatically. Across ~70 unique artists in a 14-day batch, expect ~5–8 minutes of API time.
+Be patient — Deezer is generous (10 req/s steady-state) and the script paces at ~8 req/s with automatic 429/5xx backoff. Expect a handful of minutes for a 14-day batch.
+
+**Wrong-artist search trap.** Deezer's `/search/artist` ranks by fan count and sometimes returns a collaboration profile rather than the canonical artist (e.g., "The Allman Brothers Band" returned "The Allman Brothers Band With Sheryl Crow", an almost-empty profile). If the catalog comes back tiny or contains only collab releases, bypass search with `--id`:
+
+```bash
+# look up the real Deezer artist id via https://www.deezer.com/us/artist/<id>
+npm run catalog -- "The Allman Brothers Band" --id 86 --force
+```
+
+**Fallback when the data source is blocked.** If Deezer is rate-limiting hard or down (or the artist has no Deezer presence), hand-curate the day from memory: pick well-known songs you can verify by independent means, and tell Ben that day was hand-curated so he can scrutinize. Don't ship unverified titles.
 
 ## Step 3 — For each day, propose 5 candidate puzzles
 
@@ -160,28 +177,70 @@ When Ben picks a candidate, write `data/puzzles/YYYY-MM-DD.json` matching the sc
 
 - **`edition_no`**: read the highest `edition_no` from the most recent existing puzzle JSON in `data/puzzles/`, then increment by 1 for each new day (so 5/14 = 4, 5/15 = 5, etc.). Don't restart from 1.
 - **`theme_pull_quote`** and **`marginalia_quote`**: leave `null`. Ben removed the marginalia note from the live UI; theme quote is unused right now.
-- **`connections_categories`**: 4 entries, difficulty 1 (easy) → 4 (hard). Members must be the EXACT song titles as they appear in the Spotify catalog (case + punctuation matter for the in-game tile rendering and the `/api/connections/check` validation).
+- **`connections_categories`**: 4 entries, difficulty 1 (easy) → 4 (hard). Members must be the EXACT song titles as they appear in the Deezer catalog (case + punctuation matter for the in-game tile rendering and the `/api/connections/check` validation).
 - Track each title against the cached catalog to catch typos before saving.
+
+**Verify every title programmatically before writing the JSON.** Eyeballing the distilled catalog misses Unicode and capitalization gotchas. Use a one-shot Python check against the cached catalogs:
+
+```bash
+python3 - <<'PY'
+import json, pathlib
+ROOT = pathlib.Path("data/catalogs")
+catalogs = {
+  "soccer-mommy": "soccer-mommy.json",
+  "turnstile": "turnstile.json",
+  # ... one entry per artist in the day
+}
+all_tracks = set()
+for slug, fn in catalogs.items():
+    data = json.loads((ROOT / fn).read_text())
+    for a in data["albums"]:
+        for t in a["tracks"]:
+            all_tracks.add(t["name"])
+
+candidates = [
+    "bad idea right?",
+    "Fate Is…",          # Unicode ellipsis, NOT three dots
+    "Mrs. Potters Lullaby",  # no apostrophe in "Potters"
+    "F E R A L",         # spaces between letters
+    "T.L.C. (TURNSTILE LOVE CONNECTION)",
+]
+for c in candidates:
+    print(("OK   " if c in all_tracks else "MISS "), repr(c))
+PY
+```
+
+If any line prints `MISS`, copy the exact title from the catalog JSON — do not paraphrase, do not "fix" the punctuation.
+
+**Stylized titles to watch for** (these have all bitten us in real puzzles):
+- Spaced-out letters: `F E R A L` (Turnstile) — spaces between every letter.
+- ALL-CAPS bands: Turnstile titles render uppercase (`T.L.C.`, `ALIEN LOVE CALL`, `MAGIC MAN`).
+- Lowercase-stylized artists: Olivia Rodrigo (`bad idea right?`, `ballad of a homeschooled girl`), Soccer Mommy (`night swimming`, `making the bed`), Wednesday (`vampire`).
+- Unicode ellipsis: `Fate Is…` uses `…` (U+2026), not three periods.
+- Missing/extra apostrophes: `Mrs. Potters Lullaby` (no `'`), but check both — Deezer is inconsistent.
+- Trailing punctuation: `Somebody else.` (period), `bad idea right?` (question mark) — preserve them.
+- Featured tracks and remixes often live as separate Deezer entries from the canonical album track. Prefer the canonical album version.
 
 Move to the next day, repeat.
 
-## Step 5 — When all days are written, seed + deploy
+## Step 5 — When all days are written, seed + commit
 
 ```bash
 cd "/Volumes/Ben's SSD 1/KCL Products/Sonic Acrylic Games"
-npm run seed:all                                              # upserts every JSON in data/puzzles/
-git add data/puzzles/ data/artists.json data/catalogs/*       # catalogs are gitignored — only commit the puzzles
+npm run seed:all                                              # upserts every JSON in data/puzzles/ into Neon
+git add data/puzzles/ data/artists.json                       # catalogs are gitignored — only commit puzzles + artist pool
 git status --short                                            # sanity-check before commit
 git commit -m "data: seed puzzles 2026-05-14 through 2026-05-DD"
-npx vercel --prod --yes                                       # deploy so the puzzles are live the moment ET midnight rolls
 ```
+
+**No deploy needed.** The puzzle API route is `force-dynamic` and reads from Neon live on every request, so the new puzzles are live the moment `seed:all` finishes — Vercel doesn't need to redeploy. Commit anyway so the JSONs are version-controlled.
 
 ## Cheat sheet — what to watch for
 
 - **Title matching is exact**: "Moon Song" must be exactly that — not "Moon Song." or "Moonsong" or "Moon song (Live)". Copy directly from the distilled catalog output.
 - **Don't reuse titles across categories within a puzzle** (one song = one category).
 - **Don't repeat the same artist as the source for all 4 members of a category** — try to spread. (E.g., "Songs that sound like the album titles" should pull 1 from each of 4 different artists ideally.)
-- **Watch for "feat." tracks and remixes** — they often live as separate Spotify entries from the canonical track. Use the canonical version (album track) over the remix when possible.
+- **Watch for "feat." tracks and remixes** — they often live as separate Deezer entries from the canonical track. Use the canonical version (album track) over the remix when possible.
 - **Skip days where the lineup is too weak to puzzle from** — if 4 of the 5 artists have only 1 album and very short catalogs, ask Ben to swap one artist for a deeper-catalog pick from the same decade.
 - **Edition numbering**: don't reset. Look at `data/puzzles/` for the latest edition_no, increment.
 
@@ -192,13 +251,10 @@ If Ben pushes a candidate where:
 - All 4 categories pull from only 1 or 2 artists (rather than spreading across the 5) → suggest a different cut so the puzzle reads as ABOUT the lineup, not about one band.
 - A category is mechanically lazy ("songs with the word 'I'", "songs by X") → suggest a sharper angle.
 
-## Commit/deploy hygiene
+## Commit hygiene
 
-After seeding + committing, verify the live URL returns 200:
-```bash
-curl -sSI https://games.sonicacrylic.com | head -2
-```
-And smoke-test today's puzzle endpoint:
+After seeding + committing, smoke-test today's puzzle endpoint to confirm Neon now serves the new lineup:
 ```bash
 curl -sS https://games.sonicacrylic.com/api/puzzle/today | python3 -c "import sys,json; d=json.load(sys.stdin); print('edition:', d.get('edition_no'), '| lineup:', d.get('lineup_artists'))"
 ```
+If the endpoint still shows yesterday's puzzle, the ET midnight rollover hasn't hit yet — that's expected, not a bug.
