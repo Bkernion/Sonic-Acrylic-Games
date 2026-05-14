@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { serifDisplay, plexSans, plexMono, handwritten } from "./fonts";
 import { NowPlayingProvider } from "@/components/brand/NowPlaying/Provider";
 import { TRACKS } from "@/lib/tracks";
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </main>
           </div>
         </NowPlayingProvider>
+        <Analytics />
       </body>
     </html>
   );
