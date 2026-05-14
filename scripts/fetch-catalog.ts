@@ -153,7 +153,7 @@ async function fetchAllAlbums(artistId: string): Promise<DeezerAlbumStub[]> {
   const out: DeezerAlbumStub[] = [];
   let next: string | undefined = `https://api.deezer.com/artist/${artistId}/albums?limit=100&index=0`;
   while (next) {
-    const page = await deezerGet<DeezerListResp<DeezerAlbumStub>>(next);
+    const page: DeezerListResp<DeezerAlbumStub> = await deezerGet<DeezerListResp<DeezerAlbumStub>>(next);
     out.push(...page.data);
     next = page.next;
   }
@@ -164,7 +164,7 @@ async function fetchAlbumTracks(albumId: string): Promise<Track[]> {
   const out: Track[] = [];
   let next: string | undefined = `https://api.deezer.com/album/${albumId}/tracks?limit=100&index=0`;
   while (next) {
-    const page = await deezerGet<DeezerListResp<DeezerTrack>>(next);
+    const page: DeezerListResp<DeezerTrack> = await deezerGet<DeezerListResp<DeezerTrack>>(next);
     for (const t of page.data) {
       out.push({
         id: String(t.id),
