@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-23",
+  "edition_no": 13,
+  "decade": "1970s",
+  "lineup_artists": [
+    "Tom Petty and the Heartbreakers",
+    "Steely Dan",
+    "Pink Floyd",
+    "Boston",
+    "Yes"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Songs about flying or flight",
+      "difficulty": 1,
+      "members": [
+        "Free Fallin'",
+        "Learning to Fly",
+        "Astral Traveller",
+        "Hitch a Ride"
+      ]
+    },
+    {
+      "name": "Songs about money or commerce",
+      "difficulty": 2,
+      "members": [
+        "Money",
+        "Glamour Profession",
+        "Money Becomes King",
+        "Five Per Cent for Nothing"
+      ]
+    },
+    {
+      "name": "Songs over 7 minutes long",
+      "difficulty": 3,
+      "members": [
+        "Echoes",
+        "Close to the Edge",
+        "Deacon Blues",
+        "Foreplay / Long Time"
+      ]
+    },
+    {
+      "name": "Title matches the album it appears on",
+      "difficulty": 4,
+      "members": [
+        "Aja",
+        "Atom Heart Mother",
+        "Going for the One",
+        "Don't Look Back"
+      ]
+    }
+  ]
+}

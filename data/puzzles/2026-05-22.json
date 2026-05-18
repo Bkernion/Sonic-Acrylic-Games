@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-22",
+  "edition_no": 12,
+  "decade": "2000s",
+  "lineup_artists": [
+    "The White Stripes",
+    "The Shins",
+    "Death Cab for Cutie",
+    "Fall Out Boy",
+    "A Perfect Circle"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Songs about deception or lies",
+      "difficulty": 1,
+      "members": [
+        "Truth Doesn't Make a Noise",
+        "Bait And Switch",
+        "Fake Frowns",
+        "The Patron Saint of Liars and Fakes"
+      ]
+    },
+    {
+      "name": "Title is a command",
+      "difficulty": 2,
+      "members": [
+        "Stop Breaking Down",
+        "Turn On Me",
+        "Stay Young, Go Dancing",
+        "Eat The Elephant"
+      ]
+    },
+    {
+      "name": "Phantoms and apparitions",
+      "difficulty": 3,
+      "members": [
+        "Little Ghost",
+        "Phantom Limb",
+        "The Ghosts of Beverly Drive",
+        "Vanishing"
+      ]
+    },
+    {
+      "name": "From each band's most recent album",
+      "difficulty": 4,
+      "members": [
+        "Jolene",
+        "Heartworms",
+        "Asphalt Meadows",
+        "Heartbreak Feels So Good"
+      ]
+    }
+  ]
+}

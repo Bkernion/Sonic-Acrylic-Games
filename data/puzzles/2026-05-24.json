@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-24",
+  "edition_no": 14,
+  "decade": "2010s",
+  "lineup_artists": [
+    "Architects",
+    "Breaking Benjamin",
+    "The War on Drugs",
+    "Five Finger Death Punch",
+    "Vampire Weekend"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Songs about hope and optimism",
+      "difficulty": 1,
+      "members": [
+        "Hope",
+        "Believe",
+        "Living Proof",
+        "Top of the World"
+      ]
+    },
+    {
+      "name": "Title references time",
+      "difficulty": 2,
+      "members": [
+        "How Long?",
+        "Broken Clocks",
+        "Sooner Or Later",
+        "Matter of Time"
+      ]
+    },
+    {
+      "name": "Title mentions eyes",
+      "difficulty": 3,
+      "members": [
+        "Red Eyes",
+        "Close Your Eyes",
+        "Eyes To The Wind",
+        "Dot Your Eyes"
+      ]
+    },
+    {
+      "name": "Title is unusually long",
+      "difficulty": 4,
+      "members": [
+        "Even If You Win, You're Still A Rat",
+        "An Ocean In Between The Waves",
+        "I Don't Think Much About Her No More",
+        "Mama Said Knock You Out"
+      ]
+    }
+  ]
+}
