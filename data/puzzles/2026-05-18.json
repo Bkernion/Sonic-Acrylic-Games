@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-18",
+  "edition_no": 8,
+  "decade": "2000s",
+  "lineup_artists": [
+    "Wolfmother",
+    "Audioslave",
+    "Queens of the Stone Age",
+    "The Strokes",
+    "Modest Mouse"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Songs about being alone",
+      "difficulty": 1,
+      "members": [
+        "Alone Down There",
+        "Far Away",
+        "Out Of Exile",
+        "Alone, Together"
+      ]
+    },
+    {
+      "name": "Title is a common idiom",
+      "difficulty": 2,
+      "members": [
+        "Best Of A Bad Situation",
+        "Float On",
+        "You Only Live Once",
+        "...Like Clockwork"
+      ]
+    },
+    {
+      "name": "Cosmic and celestial imagery",
+      "difficulty": 3,
+      "members": [
+        "Cosmic Egg",
+        "3rd Planet",
+        "My God Is the Sun",
+        "Shadow on the Sun"
+      ]
+    },
+    {
+      "name": "Each band's biggest hit",
+      "difficulty": 4,
+      "members": [
+        "Joker And The Thief",
+        "Like a Stone",
+        "No One Knows",
+        "Last Nite"
+      ]
+    }
+  ]
+}

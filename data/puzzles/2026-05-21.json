@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-21",
+  "edition_no": 11,
+  "decade": "2020s",
+  "lineup_artists": [
+    "Knocked Loose",
+    "boygenius",
+    "Lorna Shore",
+    "Polaris",
+    "IDLES"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Songs of regret or apology",
+      "difficulty": 1,
+      "members": [
+        "Sit & Mourn",
+        "Emily I'm Sorry",
+        "With Regards",
+        "Cry to Me"
+      ]
+    },
+    {
+      "name": "Title is a complete sentence",
+      "difficulty": 2,
+      "members": [
+        "Don't Reach For Me",
+        "We're In Love",
+        "All of This Is Fleeting",
+        "I'm Scum"
+      ]
+    },
+    {
+      "name": "From each band's most recent album",
+      "difficulty": 3,
+      "members": [
+        "Blinding Faith",
+        "Satanist",
+        "A Nameless Hymn",
+        "Dancer"
+      ]
+    },
+    {
+      "name": "Songs about violence and destruction",
+      "difficulty": 4,
+      "members": [
+        "Slaughterhouse 2",
+        "Death Can Take Me",
+        "Kill Them With Kindness",
+        "Casualty"
+      ]
+    }
+  ]
+}

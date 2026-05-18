@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-19",
+  "edition_no": 9,
+  "decade": "1960s",
+  "lineup_artists": [
+    "MC5",
+    "The Mothers of Invention",
+    "Iron Butterfly",
+    "The Yardbirds",
+    "The Beatles"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Title is 'X and Y'",
+      "difficulty": 1,
+      "members": [
+        "Twist And Shout",
+        "Pounds and Stomps",
+        "Flowers and Beads",
+        "Over and Over"
+      ]
+    },
+    {
+      "name": "Title contains a verb in -ing form",
+      "difficulty": 2,
+      "members": [
+        "Looking at You",
+        "Smokestack Lightning",
+        "Sleeping In A Jar",
+        "Getting Better"
+      ]
+    },
+    {
+      "name": "Released on a 1969 album",
+      "difficulty": 3,
+      "members": [
+        "Come Together",
+        "Soul Experience",
+        "Kick Out the Jams",
+        "Cruisin' For Burgers"
+      ]
+    },
+    {
+      "name": "Songs about altered states",
+      "difficulty": 4,
+      "members": [
+        "Lucy In The Sky With Diamonds",
+        "My Mirage",
+        "Dazed And Confused",
+        "Flower Punk"
+      ]
+    }
+  ]
+}

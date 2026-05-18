@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-20",
+  "edition_no": 10,
+  "decade": "1980s",
+  "lineup_artists": [
+    "Pixies",
+    "Hüsker Dü",
+    "Metallica",
+    "The Smiths",
+    "Dio"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Each band's signature song",
+      "difficulty": 1,
+      "members": [
+        "Where Is My Mind?",
+        "Don't Want to Know If You Are Lonely",
+        "Enter Sandman",
+        "Holy Diver"
+      ]
+    },
+    {
+      "name": "Title is a question",
+      "difficulty": 2,
+      "members": [
+        "Who's More Sorry Now?",
+        "Could You Be the One?",
+        "Am I Evil?",
+        "How Soon Is Now?"
+      ]
+    },
+    {
+      "name": "Title invokes religion or holiness",
+      "difficulty": 3,
+      "members": [
+        "Hare Krsna",
+        "Leper Messiah",
+        "Vicar in a Tutu",
+        "Sacred Heart"
+      ]
+    },
+    {
+      "name": "Title invokes royalty or nobility",
+      "difficulty": 4,
+      "members": [
+        "Andro Queen",
+        "The Queen Is Dead",
+        "King Nothing",
+        "Lord Of The Last Day"
+      ]
+    }
+  ]
+}
