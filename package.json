@@ -14,6 +14,8 @@
     "seed:day": "tsx --env-file=.env.local scripts/seed-day.ts",
     "seed:all": "tsx --env-file=.env.local scripts/seed-day.ts --all",
     "catalog": "tsx --env-file=.env.local scripts/fetch-catalog.ts",
+    "lyrics": "tsx --env-file=.env.local scripts/fetch-lyrics.ts",
+    "lyrics:peek": "tsx scripts/peek-lyrics.ts",
     "sample": "tsx scripts/sample-day.ts",
     "distill": "tsx scripts/distill-catalog.ts",
     "history": "tsx scripts/recent-categories.ts"

@@ -132,9 +132,18 @@ For day D with artists [A, B, C, D, E]:
    ```
    This gives you the artist's studio albums with track names + years.
 
-3. Look for **patterns and overlaps** across the 5 catalogs, working from the pattern library in the "Novelty rules" section. For each candidate pattern you find, mentally tag it with its axis (STRUCTURAL / TEMPORAL / THEMATIC / CROSS-ARTIST).
+3. **(Optional) Peek at lyrics** for an artist whose titles don't tell you what the songs are actually about. Lyrics dramatically widen the puzzle vocabulary — you can build categories around what songs *mean* rather than what their titles say:
+   ```bash
+   npm run lyrics:peek -- "Phoebe Bridgers"                          # first 12 lines + keyword summary for every cached song
+   npm run lyrics:peek -- "Phoebe Bridgers" --songs "Motion Sickness,Punisher"
+   ```
+   Lyrics-based category ideas: "Songs that name a U.S. city", "Songs about a parent", "Songs in first-person plural ('we')", "Songs that mention dying without saying it in the title", "Songs that reference another musician by name". Use sparingly — title-based categories are still ~70% of good puzzles because the player only sees titles. But for difficulty 3-4, lyrical aha-moments are gold.
 
-4. **Compose 5 candidate puzzles**, each one a 4-tuple of categories. Each candidate must:
+   If `npm run lyrics:peek` errors with "no lyrics cache", run `npm run lyrics -- "<Artist Name>"` first (one-time per artist, then cached).
+
+4. Look for **patterns and overlaps** across the 5 catalogs (and lyric summaries if you peeked), working from the pattern library in the "Novelty rules" section. For each candidate pattern you find, mentally tag it with its axis (STRUCTURAL / TEMPORAL / THEMATIC / CROSS-ARTIST).
+
+5. **Compose 5 candidate puzzles**, each one a 4-tuple of categories. Each candidate must:
    - Have 4 categories with clever, fresh names (no repeats from `history -- 180`)
    - Have 4 verified-real song titles per category
    - Cover **at least 3 of the 4 axes** (4 is gold; 2 or fewer = redo)
@@ -142,7 +151,7 @@ For day D with artists [A, B, C, D, E]:
    - Have no song appearing in more than one category within the candidate
    - Spread the source artists across the categories (no category drawn from only one artist if avoidable)
 
-5. Show all 5 candidates to Ben in a compact format:
+6. Show all 5 candidates to Ben in a compact format:
 
    ```
    Candidate A — axes: STRUCTURAL · TEMPORAL · THEMATIC · CROSS-ARTIST  ✓ all 4 hit
@@ -154,7 +163,7 @@ For day D with artists [A, B, C, D, E]:
    Candidate B — axes: STRUCTURAL · STRUCTURAL · THEMATIC · THEMATIC  ✗ only 2 axes — redo
    ```
 
-5. Ben says "B" (or "A with the second category renamed to X" or "redo, none of these"). If he wants edits, apply them. If he wants a re-do, propose 5 NEW candidates with a different angle.
+7. Ben says "B" (or "A with the second category renamed to X" or "redo, none of these"). If he wants edits, apply them. If he wants a re-do, propose 5 NEW candidates with a different angle.
 
 ## Step 4 — Write the JSON and move to the next day
 
