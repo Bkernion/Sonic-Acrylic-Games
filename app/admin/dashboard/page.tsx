@@ -33,7 +33,6 @@ export default async function AdminDashboard() {
     getDailyTrend(14),
   ]);
 
-  const completedTotal = perEd.reduce((n, r) => n + r.completions_known, 0);
   const captureRate = stats.total_devices > 0
     ? ((stats.total_emails / stats.total_devices) * 100).toFixed(1)
     : "0";
@@ -53,7 +52,7 @@ export default async function AdminDashboard() {
       <section className="cards">
         <Card label="Email signups" big={stats.total_emails} sub={`+${stats.emails_last_7d} last 7 days`} />
         <Card label="Active players" big={stats.total_devices} sub={`${stats.devices_active_last_7d} active last 7d`} />
-        <Card label="Puzzle completions" big={completedTotal} sub={`across ${stats.total_puzzles_shipped} editions`} />
+        <Card label="Puzzle completions" big={stats.total_completions} sub={`+${stats.completions_last_7d} last 7d · ${stats.total_puzzles_shipped} editions`} />
         <Card label="Streaming clicks" big={stats.streaming_clicks} sub={`of ${stats.total_events} total events`} />
         <Card label="Capture rate" big={`${captureRate}%`} sub="emails / unique players" />
       </section>
@@ -68,13 +67,14 @@ export default async function AdminDashboard() {
               <th>Ed.</th>
               <th>Lineup</th>
               <th className="num">Completions</th>
+              <th className="num">Unique solvers</th>
               <th className="num">Emails</th>
               <th className="num">Streaming clicks</th>
             </tr>
           </thead>
           <tbody>
             {perEd.length === 0 && (
-              <tr><td colSpan={6} className="empty">No puzzles shipped yet.</td></tr>
+              <tr><td colSpan={7} className="empty">No puzzles shipped yet.</td></tr>
             )}
             {perEd.map((r) => (
               <tr key={r.edition_no}>
@@ -84,7 +84,8 @@ export default async function AdminDashboard() {
                   {r.lineup_artists.slice(0, 3).join(" · ")}
                   {r.lineup_artists.length > 3 && ` + ${r.lineup_artists.length - 3} more`}
                 </td>
-                <td className="num">{r.completions_known}</td>
+                <td className="num">{r.completions}</td>
+                <td className="num">{r.unique_solvers}</td>
                 <td className="num">{r.email_captures}</td>
                 <td className="num">{r.streaming_clicks}</td>
               </tr>

@@ -112,7 +112,11 @@ export default function ConnectionsPage() {
     if (!state) return;
     if (state.status === "won") {
       const finish = async () => {
-        const r = await fetch("/api/streak/complete", { method: "POST" });
+        const r = await fetch("/api/streak/complete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ edition_no: puzzle?.edition_no }),
+        });
         if (r.ok) {
           const d = await r.json();
           setStreak({ current: d.current, longest: d.longest });

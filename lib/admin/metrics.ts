@@ -11,6 +11,8 @@ export type TopStats = {
   emails_last_7d: number;
   total_devices: number;
   devices_active_last_7d: number;
+  total_completions: number;       // every puzzle_completed event ever
+  completions_last_7d: number;
   total_events: number;
   streaming_clicks: number;
   total_puzzles_shipped: number;
@@ -19,21 +21,25 @@ export type TopStats = {
 type Count = { n: number };
 
 export async function getTopStats(): Promise<TopStats> {
-  const [e, e7, d, d7, ev, sc, p] = await Promise.all([
+  const [e, e7, d, d7, c, c7, ev, sc, p] = await Promise.all([
     sql`SELECT COUNT(*)::int AS n FROM email_captures`,
     sql`SELECT COUNT(*)::int AS n FROM email_captures WHERE captured_at >= NOW() - INTERVAL '7 days'`,
     sql`SELECT COUNT(*)::int AS n FROM streaks`,
     sql`SELECT COUNT(*)::int AS n FROM streaks WHERE updated_at >= NOW() - INTERVAL '7 days'`,
+    sql`SELECT COUNT(*)::int AS n FROM events WHERE name = 'puzzle_completed'`,
+    sql`SELECT COUNT(*)::int AS n FROM events WHERE name = 'puzzle_completed' AND ts >= NOW() - INTERVAL '7 days'`,
     sql`SELECT COUNT(*)::int AS n FROM events`,
     sql`SELECT COUNT(*)::int AS n FROM events WHERE name LIKE 'streaming_click%'`,
     sql`SELECT COUNT(*)::int AS n FROM daily_puzzles`,
   ]);
-  const [_e, _e7, _d, _d7, _ev, _sc, _p] = [e, e7, d, d7, ev, sc, p] as Count[][];
+  const [_e, _e7, _d, _d7, _c, _c7, _ev, _sc, _p] = [e, e7, d, d7, c, c7, ev, sc, p] as Count[][];
   return {
     total_emails: _e[0].n,
     emails_last_7d: _e7[0].n,
     total_devices: _d[0].n,
     devices_active_last_7d: _d7[0].n,
+    total_completions: _c[0].n,
+    completions_last_7d: _c7[0].n,
     total_events: _ev[0].n,
     streaming_clicks: _sc[0].n,
     total_puzzles_shipped: _p[0].n,
@@ -46,7 +52,8 @@ export type PerEditionRow = {
   lineup_artists: string[];
   email_captures: number;
   streaming_clicks: number;
-  completions_known: number;     // count of streaks whose last_completed_date matches
+  completions: number;          // every puzzle_completed event for this edition
+  unique_solvers: number;        // distinct devices who completed (one per device)
 };
 
 export async function getPerEdition(): Promise<PerEditionRow[]> {
@@ -57,7 +64,8 @@ export async function getPerEdition(): Promise<PerEditionRow[]> {
       p.lineup_artists,
       (SELECT COUNT(*)::int FROM email_captures ec WHERE ec.edition_id = p.edition_no) AS email_captures,
       (SELECT COUNT(*)::int FROM events e WHERE e.edition_id = p.edition_no AND e.name LIKE 'streaming_click%') AS streaming_clicks,
-      (SELECT COUNT(*)::int FROM streaks s WHERE s.last_completed_date = p.date) AS completions_known
+      (SELECT COUNT(*)::int FROM events e WHERE e.edition_id = p.edition_no AND e.name = 'puzzle_completed') AS completions,
+      (SELECT COUNT(DISTINCT e.device_id)::int FROM events e WHERE e.edition_id = p.edition_no AND e.name = 'puzzle_completed') AS unique_solvers
     FROM daily_puzzles p
     ORDER BY p.edition_no DESC
   `) as PerEditionRow[];
@@ -143,7 +151,7 @@ export async function getDailyTrend(days = 14): Promise<DailyPoint[]> {
     SELECT
       to_char(d.day, 'YYYY-MM-DD') AS day,
       (SELECT COUNT(*)::int FROM email_captures ec WHERE ec.captured_at::date = d.day) AS emails,
-      (SELECT COUNT(*)::int FROM streaks s WHERE s.last_completed_date = d.day) AS completions,
+      (SELECT COUNT(*)::int FROM events e WHERE e.name = 'puzzle_completed' AND e.ts::date = d.day) AS completions,
       (SELECT COUNT(*)::int FROM events e WHERE e.name LIKE 'streaming_click%' AND e.ts::date = d.day) AS clicks
     FROM d
     ORDER BY d.day DESC
