@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-31",
+  "edition_no": 20,
+  "decade": "1970s",
+  "lineup_artists": [
+    "Lynyrd Skynyrd",
+    "Genesis",
+    "Cheap Trick",
+    "The Allman Brothers Band",
+    "Foreigner"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Title invokes music or rock 'n' roll",
+      "difficulty": 1,
+      "members": [
+        "Juke Box Hero",
+        "Rock 'n' Roll Tonight",
+        "Swamp Music",
+        "Statesboro Blues"
+      ]
+    },
+    {
+      "name": "Title contains a comma",
+      "difficulty": 2,
+      "members": [
+        "Tonight, Tonight, Tonight",
+        "Taxman, Mr. Thief",
+        "Win, Lose Or Draw",
+        "Long, Long Way from Home"
+      ]
+    },
+    {
+      "name": "Title invokes home or returning",
+      "difficulty": 3,
+      "members": [
+        "Sweet Home Alabama",
+        "Home by the Sea",
+        "Please Call Home",
+        "Back Where You Belong"
+      ]
+    },
+    {
+      "name": "Songs about saying goodbye",
+      "difficulty": 4,
+      "members": [
+        "Tomorrow's Goodbye",
+        "Throwing It All Away",
+        "Auf Wiedersehen",
+        "Leavin'"
+      ]
+    }
+  ]
+}

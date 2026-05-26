@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-30",
+  "edition_no": 19,
+  "decade": "2010s",
+  "lineup_artists": [
+    "Highly Suspect",
+    "Arcade Fire",
+    "Puscifer",
+    "Bring Me the Horizon",
+    "Avenged Sevenfold"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Title invokes illness or remedy",
+      "difficulty": 1,
+      "members": [
+        "Hospital for Souls",
+        "The Remedy",
+        "Suicide Machine",
+        "My Body Is a Cage"
+      ]
+    },
+    {
+      "name": "Title invokes a fairy tale or myth",
+      "difficulty": 2,
+      "members": [
+        "Snow White",
+        "Peter Pan",
+        "(I Used to Make Out With) Medusa",
+        "Beast and the Harlot"
+      ]
+    },
+    {
+      "name": "Songs critiquing modern life or fame",
+      "difficulty": 3,
+      "members": [
+        "Modern Man",
+        "Critical Acclaim",
+        "Antivist",
+        "Cool Kids"
+      ]
+    },
+    {
+      "name": "Songs about intoxication or self-destruction",
+      "difficulty": 4,
+      "members": [
+        "Drunk With Power",
+        "Bath Salts",
+        "Wasted Hours",
+        "Brompton Cocktail"
+      ]
+    }
+  ]
+}

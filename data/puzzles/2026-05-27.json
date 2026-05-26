@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-27",
+  "edition_no": 16,
+  "decade": "1980s",
+  "lineup_artists": [
+    "Slayer",
+    "Jane's Addiction",
+    "The Cure",
+    "U2",
+    "Iron Maiden"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Title is in 2nd person",
+      "difficulty": 1,
+      "members": [
+        "Why Can't I Be You?",
+        "All I Want Is You",
+        "Bring Your Daughter...To the Slaughter",
+        "You Against You"
+      ]
+    },
+    {
+      "name": "Title invokes the end of the world",
+      "difficulty": 2,
+      "members": [
+        "Until The End Of The World",
+        "Brave New World",
+        "World Painted Blood",
+        "End"
+      ]
+    },
+    {
+      "name": "Each song tells a real historical story",
+      "difficulty": 3,
+      "members": [
+        "Sunday Bloody Sunday",
+        "Angel Of Death",
+        "Paschendale",
+        "Three Days"
+      ]
+    },
+    {
+      "name": "Songs about being lost or adrift",
+      "difficulty": 4,
+      "members": [
+        "Lost in a Lost World",
+        "The Wanderer",
+        "Sinking",
+        "Underground"
+      ]
+    }
+  ]
+}

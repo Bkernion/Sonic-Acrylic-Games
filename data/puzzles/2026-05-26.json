@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-26",
+  "edition_no": 15,
+  "decade": "2000s",
+  "lineup_artists": [
+    "The Mars Volta",
+    "Mastodon",
+    "Disturbed",
+    "Franz Ferdinand",
+    "Killswitch Engage"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Title is in a non-English language",
+      "difficulty": 1,
+      "members": [
+        "Tira Me a Las Aranas",
+        "Auf Achse",
+        "Vide Infra",
+        "Façade"
+      ]
+    },
+    {
+      "name": "Title names a literary or mythical figure",
+      "difficulty": 2,
+      "members": [
+        "I Am Ahab",
+        "Ulysses",
+        "Cassandra Gemini",
+        "Rose of Sharyn"
+      ]
+    },
+    {
+      "name": "Lyrics describe fire or burning",
+      "difficulty": 3,
+      "members": [
+        "Drunkship Of Lanterns",
+        "Island",
+        "Prayer",
+        "Numbered Days"
+      ]
+    },
+    {
+      "name": "Songs about losing someone",
+      "difficulty": 4,
+      "members": [
+        "Roots Remain",
+        "Save Our Last Goodbye",
+        "Goodbye Lovers and Friends",
+        "The End of Heartache"
+      ]
+    }
+  ]
+}

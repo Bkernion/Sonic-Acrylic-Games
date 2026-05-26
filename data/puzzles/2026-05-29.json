@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-29",
+  "edition_no": 18,
+  "decade": "1990s",
+  "lineup_artists": [
+    "Foo Fighters",
+    "Nirvana",
+    "Radiohead",
+    "Korn",
+    "System of a Down"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Title is an acronym or initialism",
+      "difficulty": 1,
+      "members": [
+        "M.I.A.",
+        "2 + 2 = 5",
+        "A.D.I.D.A.S.",
+        "B.Y.O.B."
+      ]
+    },
+    {
+      "name": "Title invokes madness or insanity",
+      "difficulty": 2,
+      "members": [
+        "Paranoid Android",
+        "Lithium",
+        "Am I Going Crazy",
+        "Psycho"
+      ]
+    },
+    {
+      "name": "Songs about feeling like an outsider",
+      "difficulty": 3,
+      "members": [
+        "Creep",
+        "Negative Creep",
+        "Blind",
+        "The Pretender"
+      ]
+    },
+    {
+      "name": "Title names a real-life person",
+      "difficulty": 4,
+      "members": [
+        "Frances Farmer Will Have Her Revenge On Seattle",
+        "Hey, Johnny Park!",
+        "Justin",
+        "Mr. Jack"
+      ]
+    }
+  ]
+}

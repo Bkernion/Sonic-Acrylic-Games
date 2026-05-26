@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-28",
+  "edition_no": 17,
+  "decade": "2020s",
+  "lineup_artists": [
+    "Yard Act",
+    "MJ Lenderman",
+    "Polyphia",
+    "Geese",
+    "Adrianne Lenker"
+  ],
+  "theme_pull_quote": null,
+  "marginalia_quote": null,
+  "connections_categories": [
+    {
+      "name": "Title mentions food or drink",
+      "difficulty": 1,
+      "members": [
+        "Pour Another",
+        "Gentleman's Jack",
+        "Champagne",
+        "Donut Seam"
+      ]
+    },
+    {
+      "name": "Title invokes weather or sea",
+      "difficulty": 2,
+      "members": [
+        "Storm",
+        "Snow Song",
+        "Rain Dance",
+        "The Undertow"
+      ]
+    },
+    {
+      "name": "Title starts with a number",
+      "difficulty": 3,
+      "members": [
+        "100% Endurance",
+        "100 Horses",
+        "87",
+        "Basketball #1"
+      ]
+    },
+    {
+      "name": "Songs about heartache and loss",
+      "difficulty": 4,
+      "members": [
+        "Heartbreak Blues",
+        "When the Laughter Stops",
+        "Sadness As A Gift",
+        "Getting Killed"
+      ]
+    }
+  ]
+}
