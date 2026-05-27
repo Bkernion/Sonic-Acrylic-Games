@@ -8,6 +8,7 @@ import { Mistakes } from "@/components/connections/Mistakes";
 import { ActionRow } from "@/components/connections/ActionRow";
 import { WinModal } from "@/components/connections/WinModal";
 import { MiniPill } from "@/components/brand/NowPlaying/MiniPill";
+import { LineupCard } from "@/components/brand/LineupCard";
 import { useNowPlaying } from "@/components/brand/NowPlaying/Provider";
 import { initState, toggleTile, clearSelection, revealAll, type ConnectionsState, type Category } from "@/lib/connections";
 import { seededShuffle } from "@/lib/shuffle";
@@ -212,6 +213,9 @@ export default function ConnectionsPage() {
           onSubmit={submit}
           submitDisabled={state.selected.length !== 4}
         />
+
+        {/* Today's artists (the puzzle's source lineup) */}
+        <LineupCard lineup={puzzle.lineup_artists} />
 
         {toast ? (
           <div className="mx-4 mt-3 mono uppercase text-center" style={{ fontSize: 10, letterSpacing: "0.22em", color: "var(--taupe)" }}>
